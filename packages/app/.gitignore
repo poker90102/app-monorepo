@@ -76,13 +76,8 @@ dist/
 
 # @end expo-cli
 
-# except for .gitkeep
-!.gitkeep
-
 # Onekey secrecy
 keys.secret
-credentials.json
-android/keystores/*
-ios/certs/*
+android/keystores/
 
 src/public/connect

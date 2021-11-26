@@ -18,13 +18,11 @@ import com.facebook.soloader.SoLoader;
 
 import expo.modules.ApplicationLifecycleDispatcher;
 import expo.modules.ReactNativeHostWrapper;
-import expo.modules.devlauncher.DevLauncherController;
 import so.onekey.app.wallet.utils.Utils;
 
 import com.facebook.react.bridge.JSIModulePackage;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 
-import expo.modules.updates.UpdatesDevLauncherController;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -35,7 +33,7 @@ public class MainApplication extends Application implements ReactApplication , V
     new ReactNativeHost(this) {
     @Override
     public boolean getUseDeveloperSupport() {
-      return DevLauncherController.getInstance().getUseDeveloperSupport();
+      return BuildConfig.DEBUG;
     }
 
     @Override
@@ -70,10 +68,6 @@ public class MainApplication extends Application implements ReactApplication , V
     Utils.init(this);
     SoLoader.init(this, /* native exopackage */ false);
 
-    DevLauncherController.initialize(this, getReactNativeHost());
-    if (BuildConfig.DEBUG) {
-      DevLauncherController.getInstance().setUpdatesInterface(UpdatesDevLauncherController.initialize(this));
-    }
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
     ApplicationLifecycleDispatcher.onApplicationCreate(this);
   }

@@ -1,4 +1,3 @@
-import 'expo-dev-client';
 import React, { FC } from 'react';
 import Home from '@onekeyhq/kit/src/pages/Home';
 import { KitApp, StackNavigator } from '@onekeyhq/kit';
