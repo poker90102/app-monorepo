@@ -48,4 +48,3 @@ yarn-error.log*
 build-electron
 
 public/static/connect
-public/static/preload.js

@@ -33,27 +33,10 @@ global.logger = logger;
 global.resourcesPath = isDev
   ? path.join(__dirname, '..', 'public', 'static')
   : process.resourcesPath;
-const staticPath = path.join(__dirname, '..', 'public', 'static');
-const preloadJsUrl = path.join(staticPath, 'preload.js'); // static path
 
 async function createMainWindow() {
   const browserWindow = new BrowserWindow({
-    frame: true, // show title
-    // icon: null,
-    webPreferences: {
-      webviewTag: true,
-      webSecurity: !isDevelopment,
-      nativeWindowOpen: true,
-      allowRunningInsecureContent: isDevelopment,
-      nodeIntegration: true,
-      nodeIntegrationInSubFrames: true,
-
-      // https://www.electronjs.org/docs/latest/tutorial/context-isolation
-      contextIsolation: false,
-
-      // isIpcReady will check by this
-      preload: preloadJsUrl,
-    },
+    webPreferences: { nodeIntegration: true },
   });
 
   if (isDevelopment) {
@@ -69,14 +52,6 @@ async function createMainWindow() {
       });
 
   browserWindow.loadURL(src);
-
-  browserWindow.webContents.on('did-finish-load', () => {
-    browserWindow.webContents.send('SET_ONEKEY_DESKTOP_GLOBALS', {
-      resourcesPath: global.resourcesPath,
-      staticPath: `file://${staticPath}`,
-      preloadJsUrl: `file://${preloadJsUrl}`,
-    });
-  });
 
   browserWindow.on('closed', () => {
     mainWindow = null;

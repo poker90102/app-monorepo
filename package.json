@@ -7,9 +7,7 @@
     ]
   },
   "scripts": {
-    "postinstall": "husky install && yarn build:connect && yarn build:inject",
-    "build:inject": "yarn workspace @onekeyhq/inpage-provider build",
-    "watch:inject": "yarn workspace @onekeyhq/inpage-provider watch-inject",
+    "postinstall": "husky install && yarn build:connect",
     "build:connect": "yarn build:connect:desktop && yarn build:connect:native",
     "build:connect:desktop": "yarn webpack --config ./packages/kit/development/desktop.connect.webpack.config.js",
     "build:connect:native": "yarn webpack --config ./packages/kit/development/native.connect.webpack.config.js",
@@ -22,11 +20,13 @@
     "ios-xcode": "open ./packages/app/ios/OneKeyWallet.xcworkspace",
     "android": "yarn workspace @onekeyhq/app android",
     "web": "yarn workspace @onekeyhq/web start",
-    "desktop": "yarn build:inject && yarn workspace @onekeyhq/desktop dev",
-    "build:desktop": "yarn build:inject && yarn workspace @onekeyhq/desktop build",
+    "desktop": "yarn workspace @onekeyhq/desktop dev",
     "build:icon": "yarn workspace @shared/components build:icon"
   },
-  "dependencies": {},
+  "dependencies": {
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.15.8",
     "@babel/eslint-parser": "^7.15.4",
@@ -35,7 +35,6 @@
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
     "babel-loader": "8.1.0",
-    "babel-plugin-inline-import": "^3.0.0",
     "copy-webpack-plugin": "^6.0.2",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",

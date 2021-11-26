@@ -47,7 +47,6 @@ declare namespace NodeJS {
 
 declare var logger: ILogger;
 declare var resourcesPath: string;
-declare var preloadCachePath: string;
 
 declare type WinBounds = {
   height: number;

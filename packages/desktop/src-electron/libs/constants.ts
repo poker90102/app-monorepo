@@ -1,9 +1,6 @@
 export const PROTOCOL = 'file';
 
-export const MODULES = [
-  'bridge',
-  // 'request-filter' // TODO ignore request-filters
-];
+export const MODULES = ['bridge', 'request-filter'];
 
 // Modules only used in prod mode
 export const MODULES_PROD = ['file-protocol'];
