@@ -16,6 +16,5 @@ export { default as Switch } from './Switch';
 export { default as Address } from './Address';
 export { default as Jazzicon } from './Jazzicon';
 export { default as Icon } from './Icon';
-export { default as Token } from './Token';
 
 export * from './Provider/hooks';
