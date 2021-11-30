@@ -5,16 +5,17 @@ import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.IsoDep
 import android.util.Log
-import androidx.annotation.IntDef
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import so.onekey.app.wallet.MainApplication
 import so.onekey.app.wallet.nfc.NFCExceptions
 import so.onekey.app.wallet.nfc.OnekeyLiteCard
-import so.onekey.app.wallet.nfc.entries.CardState
 import so.onekey.app.wallet.utils.Utils
+import so.onekey.app.wallet.viewModel.NfcViewModel
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 import javax.annotation.Nullable
@@ -34,18 +35,11 @@ class OKLiteManager(private val context: ReactApplicationContext) : ReactContext
         private const val NFC_ACTIVE_CONNECTION = "nfc_active_connection"
     }
 
-    @IntDef(NFCState.Dead, NFCState.Started)
-    annotation class NFCState {
-        companion object {
-            const val Dead = -1
-            const val Started = 0
-        }
-    }
-
-    private val mNFCConnectedChannel = Channel<IsoDep?>(1)
-    private val mNFCState = AtomicInteger(NFCState.Dead)
+    private val mNFCConnectedChannel = Channel<IsoDep>(1)
     private val mShowDialogNumber = AtomicInteger(0)
-    private var mCurrentCardState: CardState? = null
+    private val mNfcViewModel by lazy {
+        ViewModelProvider(Utils.getApp() as MainApplication).get(NfcViewModel::class.java)
+    }
 
     private val mActivityEventListener = object : BaseActivityEventListener() {
         override fun onNewIntent(intent: Intent?) {
@@ -67,16 +61,15 @@ class OKLiteManager(private val context: ReactApplicationContext) : ReactContext
 
                 Log.e(OnekeyLiteCard.TAG, isoDep.toString())
                 launch(Dispatchers.IO) {
-                    mNFCConnectedChannel.trySend(isoDep)
                     try {
-                        // 处理主动触发 NFC
+                        val startRequest = mNfcViewModel.startRequest(isoDep)
+                                ?: throw NFCExceptions.InitChannelException()
+                        mNFCConnectedChannel.trySend(startRequest.isoDep)
                         delay(100)
                         if (!mNFCConnectedChannel.isEmpty) {
                             Log.e(TAG, "There is no way to use NFC")
                             mNFCConnectedChannel.receive()
-                            val startRequest = OnekeyLiteCard.initChannelRequest(isoDep)
                             val dataMap = Arguments.createMap().apply {
-                                putInt("code", -1)
                                 putString("type", "OneKey_Lite")
                                 putString("serialNum", startRequest.serialNum)
                                 putBoolean("isNewCard", startRequest.isNewCard)
@@ -85,10 +78,8 @@ class OKLiteManager(private val context: ReactApplicationContext) : ReactContext
                             sendEvent(context, NFC_ACTIVE_CONNECTION, dataMap)
                         }
                     } catch (e: Exception) {
-                        e.printStackTrace()
                         // 未知设备或连接失败
                         val dataMap = Arguments.createMap().apply {
-                            putInt("code", -1)
                             putString("type", "unknown")
                         }
                         sendEvent(context, NFC_ACTIVE_CONNECTION, dataMap)
@@ -111,7 +102,7 @@ class OKLiteManager(private val context: ReactApplicationContext) : ReactContext
                 if (it !is FragmentActivity) return@launch
 
                 OnekeyLiteCard.startNfc(it) {
-                    mNFCState.set(NFCState.Started)
+                    mNfcViewModel.initialize()
                 }
             }
         }
@@ -122,7 +113,6 @@ class OKLiteManager(private val context: ReactApplicationContext) : ReactContext
             launch(Dispatchers.IO) {
                 try {
                     OnekeyLiteCard.stopNfc(it as FragmentActivity)
-                    mNFCState.set(NFCState.Dead)
                 }catch (e:Exception){
                     e.printStackTrace()
                 }
@@ -141,81 +131,52 @@ class OKLiteManager(private val context: ReactApplicationContext) : ReactContext
                 .emit(eventName, params)
     }
 
-    @Throws(NFCExceptions::class)
-    private suspend fun acquireDevice(): IsoDep? {
+    private suspend fun acquireDevice(): IsoDep {
         // 展示连接 ui
         sendEvent(context, NFC_UI_EVENT, Arguments.createMap().also {
-            it.putInt("code", 1)
-            it.putString("message", "show_connect_ui")
+            it.putString("state", "show_connect_ui")
         })
         mShowDialogNumber.incrementAndGet()
-        if (!mNFCConnectedChannel.isEmpty) {
-            mNFCConnectedChannel.tryReceive()
-        }
-        val receiveIsoDep = mNFCConnectedChannel.receive()
-        mCurrentCardState = null
-        if (receiveIsoDep == null) {
-            // 取消连接
-            releaseDevice()
-        } else {
-            val initChannelRequest = OnekeyLiteCard.initChannelRequest(receiveIsoDep)
-
-            mCurrentCardState = initChannelRequest
-
-            // 展示连接结束 ui
-            sendEvent(context, NFC_UI_EVENT, Arguments.createMap().also {
-                it.putInt("code", 2)
-                it.putString("message", "connected")
-            })
-        }
-        return receiveIsoDep
+        val receive = mNFCConnectedChannel.receive()
+        // 展示连接结束 ui
+        sendEvent(context, NFC_UI_EVENT, Arguments.createMap().also {
+            it.putString("state", "connected")
+        })
+        return receive
     }
 
     private fun releaseDevice() {
-        if (mShowDialogNumber.get() <= 0) return
-
-        mCurrentCardState = null
         val decrementAndGet = mShowDialogNumber.decrementAndGet()
-
         // 关闭连接结束 ui
         sendEvent(context, NFC_UI_EVENT, Arguments.createMap().also {
-            it.putInt("code", 3)
-            it.putString("message", "close_connect_ui")
+            it.putString("state", "close_connect_ui")
         })
 
         // 还有需要处理的 NFC 事件
         if (decrementAndGet > 0) {
             // 展示连接 ui
             sendEvent(context, NFC_UI_EVENT, Arguments.createMap().also {
-                it.putInt("code", 1)
-                it.putString("message", "show_connect_ui")
+                it.putString("state", "show_connect_ui")
             })
         }
     }
 
     private fun isTargetDevice(cardId: String): Boolean {
-        return cardId == mCurrentCardState?.serialNum
+        return cardId == mNfcViewModel.cardState.value?.serialNum
     }
 
     private suspend fun <T> handleOperation(
             callback: Callback,
             execute: (isoDep: IsoDep) -> T
     ) {
+        val isoDep = acquireDevice()
         try {
-            val isoDep = acquireDevice() ?: return
             val executeResult = execute(isoDep)
             callback.invoke(null, executeResult)
         } catch (e: NFCExceptions) {
             callback.invoke(e.toJson(), null)
         }
         releaseDevice()
-    }
-
-    @ReactMethod
-    fun cancel() {
-        if (mNFCConnectedChannel.isEmpty) {
-            mNFCConnectedChannel.trySend(null)
-        }
     }
 
     @ReactMethod

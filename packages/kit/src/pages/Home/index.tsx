@@ -16,16 +16,13 @@ function AppRouterLinks() {
   const navigation = useNavigation();
   return (
     <>
-      <Box>
-        注：StackNavigator 在 desktop 下暂时有编译问题。 在 web 下图标不显示。
-      </Box>
       <Button
         onPress={() => {
           // @ts-ignore
           navigation.navigate('WebViewDemo');
         }}
       >
-        WebViewDemo (AppOnly)
+        PageWebView (AppOnly)
       </Button>
       <Button
         onPress={() => {
@@ -67,7 +64,14 @@ export default function App() {
           setText(Date.now().toString());
         }}
       >
-        Primary
+        Primary 10
+      </Button>
+      <Button
+        onPress={() => {
+          window.open(window.location.href);
+        }}
+      >
+        Expand View
       </Button>
       <Address text="0x4330B96Cde5bf063F21978870fF193Ae8cae4c48" short />
       <Jazzicon
