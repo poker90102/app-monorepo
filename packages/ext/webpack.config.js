@@ -9,22 +9,10 @@ const pluginsHtml = require('./development/pluginsHtml');
 const pluginsCopy = require('./development/pluginsCopy');
 const devUtils = require('./development/devUtils');
 const nextWebpack = require('./development/nextWebpack');
-const packageJson = require('./package.json');
 
 const ASSET_PATH = process.env.ASSET_PATH || '/';
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
-// FIX error:
-//    Module parse failed: Unexpected token (7:11)
-//    You may need an appropriate loader to handle this file type
-const transpileModules = [
-  '@onekeyhq/components',
-  '@onekeyhq/kit',
-  '@onekeyhq/inpage-provider',
-  '@onekeyhq/shared',
-];
-
-// TODO use webpack 4.43.0
 console.log('============ webpack.version ', webpack.version);
 
 // load the secrets
@@ -56,26 +44,18 @@ const resolveExtensions = fileExtensions
 let webpackConfig = {
   // add custom config, will be deleted later
   chromeExtensionBoilerplate: {
-    notHotReload: [
-      // ignore background
-      'background',
-      'content-script',
-      'ui-devtools',
-    ],
+    notHotReload: ['background', 'content-script', 'ui-devtools'],
   },
   mode: IS_DEV ? 'development' : 'production', // development, production
   // mode: 'development',
   entry: {
     'background': path.join(__dirname, 'src/entry/background.ts'),
     'content-script': path.join(__dirname, 'src/entry/content-script.ts'),
-    'ui-popup': path.join(__dirname, 'src/entry/ui-popup.tsx'),
+    'ui-popup': path.join(__dirname, 'src/entry/ui-popup.ts'),
     // 'ui-options': path.join(__dirname, 'src/entry/ui-options.ts'),
     // 'ui-newtab': path.join(__dirname, 'src/entry/ui-newtab.ts'),
-    'ui-devtools': path.join(__dirname, 'src/entry/ui-devtools.ts'),
-    'ui-devtools-panel': path.join(
-      __dirname,
-      'src/entry/ui-devtools-panel.tsx',
-    ),
+    // 'ui-devtools': path.join(__dirname, 'src/entry/ui-devtools.ts'),
+    // 'ui-devtools-panel': path.join(__dirname, 'src/entry/ui-devtools-panel.ts'),
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -132,14 +112,6 @@ let webpackConfig = {
     new webpack.ProgressPlugin(),
     // expose and write the allowed env vars on the compiled bundle
     new webpack.EnvironmentPlugin(['NODE_ENV']),
-    new webpack.DefinePlugin({
-      'process.env.ONEKEY_BUILD_TYPE': JSON.stringify('ext'),
-      'process.env.VERSION': JSON.stringify(packageJson.version),
-    }),
-    // FIX ERROR: process is not defined
-    new webpack.ProvidePlugin({
-      process: 'process/browser',
-    }),
     ...pluginsCopy,
     ...pluginsHtml,
   ],
@@ -159,7 +131,11 @@ let webpackConfig = {
 };
 
 webpackConfig = nextWebpack(webpackConfig, {
-  transpileModules,
+  transpileModules: [
+    '@onekeyhq/components',
+    '@onekeyhq/kit',
+    '@onekeyhq/inpage-provider',
+  ],
   debug: false,
   projectRoot: __dirname,
 });

@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, contextBridge } from 'electron';
 
 declare global {
   interface Window {
@@ -7,15 +7,7 @@ declare global {
   }
 }
 
-ipcRenderer.on('SET_ONEKEY_DESKTOP_GLOBALS', (_, globals: Record<any, any>) => {
-  // for DesktopWebView:
-  //    const { preloadJsUrl } = window.ONEKEY_DESKTOP_GLOBALS;
-  window.ONEKEY_DESKTOP_GLOBALS = globals;
-  // contextBridge.exposeInMainWorld('ONEKEY_DESKTOP_GLOBALS', globals);
-});
-
 const desktopApi = {
-  hello: 'world',
   // module (auto-updater)
   checkForUpdates: (isManual?: boolean) =>
     ipcRenderer.send('update/check', isManual),
@@ -34,5 +26,4 @@ const desktopApi = {
 
 export const DesktopAPI = typeof desktopApi;
 
-window.desktopApi = desktopApi;
-// contextBridge.exposeInMainWorld('desktopApi', desktopApi);
+contextBridge.exposeInMainWorld('desktopApi', desktopApi);

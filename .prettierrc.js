@@ -1,7 +1,7 @@
 module.exports = {
   singleQuote: true,
   trailingComma: 'all',
-  quoteProps: 'preserve', // let eslint fix quoteProps
+  quoteProps: 'preserve',
   // "printWidth": 120,
   // "tabWidth": 8,
 };

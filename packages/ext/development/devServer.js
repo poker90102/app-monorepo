@@ -8,7 +8,6 @@ const webpack = require('webpack');
 const path = require('path');
 const config = require('../webpack.config');
 const env = require('./env');
-const devUtils = require('./devUtils');
 
 const options = config.chromeExtensionBoilerplate || {};
 const excludeEntriesToHotReload = options.notHotReload || [];
@@ -25,11 +24,6 @@ for (const entryName in config.entry) {
 
 config.plugins = [new webpack.HotModuleReplacementPlugin()].concat(
   config.plugins || [],
-);
-
-devUtils.writePreviewWebpackConfigJson(
-  config,
-  'webpack.config.preview.devServer.json',
 );
 
 delete config.chromeExtensionBoilerplate;

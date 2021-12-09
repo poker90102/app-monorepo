@@ -3,9 +3,8 @@ import { ICreateJsBridgeParams, IJsBridge } from '../types';
 
 function createJsBridgeInpage({
   sendPayload = () => {},
-  sendAsString = true,
 }: ICreateJsBridgeParams): IJsBridge {
-  return createJsBridgeBase({ sendPayload, sendAsString });
+  return createJsBridgeBase({ sendPayload });
 }
 
 export default createJsBridgeInpage;

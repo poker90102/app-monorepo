@@ -12,7 +12,6 @@ module.exports = {
   entry: {
     injectedDesktop: './src/injected/injectedDesktop.tsx',
     injectedNative: './src/injected/injectedNative.tsx',
-    injectedExtension: './src/injected/injectedExtension.tsx',
   },
   output: {
     // libraryTarget: 'umd' // Fix: "Uncaught ReferenceError: exports is not defined".

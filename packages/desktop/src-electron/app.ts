@@ -43,8 +43,7 @@ async function createMainWindow() {
       webSecurity: !isDev,
       nativeWindowOpen: true,
       allowRunningInsecureContent: isDev,
-      // webview injected js needs isolation=false, because property can not be exposeInMainWorld() when isolation enabled.
-      contextIsolation: false,
+      contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
     },
     icon: path.join(global.resourcesPath, 'images', 'icons', '512x512.png'),

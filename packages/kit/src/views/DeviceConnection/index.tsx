@@ -21,7 +21,7 @@ import {
   HStack,
   useTheme,
 } from '@onekeyhq/components';
-import * as buildUtils from '@onekeyhq/shared/src/platformEnv';
+import * as buildUtils from '../../utils/env';
 // import ble from '../../utils/ble/handler';
 
 const CONNECT_URL = buildUtils.isDev()

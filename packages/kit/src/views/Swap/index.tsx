@@ -1,12 +1,12 @@
 import React from 'react';
+import { Text } from 'native-base';
 
-import { Box } from '@onekeyhq/components';
-import DemoInpageProvider from '../../../../inpage-provider/src/demo/DemoInpageProvider';
+import { Center } from '@onekeyhq/components';
 
 const Swap = () => (
-  <Box flex="1" bg="background-hovered">
-    <DemoInpageProvider src="https://swap.onekey.so/#/" />
-  </Box>
+  <Center flex="1" bg="background-hovered">
+    <Text color="text-default">Swap</Text>
+  </Center>
 );
 
 export default Swap;

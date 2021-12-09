@@ -1,5 +1,5 @@
 import WebView from 'react-native-webview';
-import { WindowOneKey } from './types';
+import { WindowOneKey } from '@onekeyhq/inpage-provider/src/types';
 
 declare global {
   // eslint-disable-next-line

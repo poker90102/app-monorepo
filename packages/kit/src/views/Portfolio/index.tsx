@@ -1,12 +1,12 @@
 import React from 'react';
+import { Text } from 'native-base';
 
-import { Box } from '@onekeyhq/components';
-import DemoInpageProvider from '@onekeyhq/inpage-provider/src/demo/DemoInpageProvider';
+import { Center } from '@onekeyhq/components';
 
 const Portfolio = () => (
-  <Box flex="1" bg="background-hovered">
-    <DemoInpageProvider src="https://portfolio.onekey.so/" />
-  </Box>
+  <Center flex="1" bg="background-hovered">
+    <Text color="text-default">Portfolio</Text>
+  </Center>
 );
 
 export default Portfolio;

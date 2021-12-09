@@ -1,12 +1,12 @@
 import React from 'react';
+import { Text } from 'native-base';
 
-import { Box } from '@onekeyhq/components';
-import DemoInpageProvider from '@onekeyhq/inpage-provider/src/demo/DemoInpageProvider';
+import { Center } from '@onekeyhq/components';
 
 const Discover = () => (
-  <Box flex="1" bg="background-hovered">
-    <DemoInpageProvider src="https://discover.onekey.so/" />
-  </Box>
+  <Center flex="1" bg="background-hovered">
+    <Text color="text-default">Discover</Text>
+  </Center>
 );
 
 export default Discover;

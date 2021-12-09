@@ -9,7 +9,6 @@ import {
 
 function createJsBridgeBase({
   sendPayload = () => {},
-  sendAsString = true,
 }: ICreateJsBridgeParams = {}): IJsBridge {
   // process?.env?.VERSION will fail in RN
   const version: string = process.env.VERSION as string;
@@ -37,16 +36,12 @@ function createJsBridgeBase({
     data,
     type,
     origin,
-    remoteId,
-    ...others
   }: IJsBridgeMessagePayload) {
     const payload = {
       id,
       type,
       data,
       origin,
-      remoteId,
-      ...others,
     };
     if (resolve && id) {
       callbacksMap[id] = { resolve };
@@ -58,7 +53,6 @@ function createJsBridgeBase({
     data,
     id,
     origin,
-    remoteId,
     resolve,
     reject,
   }: JsBridgeEventPayload) {
@@ -72,7 +66,6 @@ function createJsBridgeBase({
       resolve,
       id,
       data,
-      remoteId,
       origin,
     };
   }
@@ -100,7 +93,7 @@ function createJsBridgeBase({
         }
       });
     },
-    send({ type, data, id, remoteId }: IJsBridgeMessagePayload) {
+    send({ type, data, id }: IJsBridgeMessagePayload) {
       return new Promise((resolve) => {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         let _resolve;
@@ -117,15 +110,11 @@ function createJsBridgeBase({
           type,
           // TODO value in HOST
           origin: global?.location?.origin,
-          remoteId,
         });
-        let payloadToSend: unknown = payload;
-        if (sendAsString) {
-          payloadToSend = JSON.stringify(payload);
-        }
+        const payloadStr = JSON.stringify(payload);
         // TODO rename sendMessage
         if (sendPayload) {
-          sendPayload(payloadToSend as string);
+          sendPayload(payloadStr);
         }
       });
     },
@@ -140,11 +129,8 @@ function createJsBridgeBase({
         payload = JSON.parse(payloadStr) as IJsBridgeMessagePayload;
       }
 
-      const { type, id, data, origin, remoteId } = payload;
-      this.remoteInfo = {
-        origin,
-        remoteId,
-      };
+      const { type, id, data, origin } = payload;
+      this.remoteInfo.origin = origin;
       // TODO origin validation check
 
       if (type === MESSAGE_TYPES.response) {
@@ -156,28 +142,25 @@ function createJsBridgeBase({
       } else {
         const eventPayload = createEventPayload({
           resolve: (d) => {
-            self.response(id as string, d, null, remoteId);
+            self.response(id as string, d, null);
           },
           id,
           data,
           origin,
-          remoteId,
         });
         // TODO onReceive/responseMessage -> auto response resolve, catch error reject
         this.trigger('message', eventPayload);
       }
     },
-    // TODO requestToAll
     // send request to remote
-    request(data: unknown, remoteId = null) {
+    request(data: unknown) {
       return this.send({
         type: this.MESSAGE_TYPES.request,
         data,
-        remoteId,
       });
     },
     // send response to remote
-    response(id, data: unknown, error = null, remoteId = null) {
+    response(id, data: unknown, error = null) {
       if (error) {
         console.error(error);
       }
@@ -186,7 +169,6 @@ function createJsBridgeBase({
         type: this.MESSAGE_TYPES.response,
         data,
         id,
-        remoteId,
       });
     },
     // response middleware
