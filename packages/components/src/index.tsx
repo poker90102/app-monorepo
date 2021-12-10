@@ -1,6 +1,7 @@
 export { default as Alert } from './Alert';
 export { default as Box } from './Box';
 export { default as Button } from './Button';
+export { default as IconButton } from './IconButton';
 export { default as Center } from './Center';
 export { default as Divider } from './Divider';
 export { default as HStack } from './HStack';
@@ -23,6 +24,7 @@ export { default as AlertDialog } from './AlertDialog';
 export { default as FlatList } from './FlatList';
 export { default as Pressable } from './Pressable';
 export { default as Typography } from './Typography';
+export { default as Badge } from './Badge';
 export { default as Menu } from './Menu';
 
 export * from './TabBar/Tab';
