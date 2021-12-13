@@ -23,6 +23,8 @@ import EmptyGallery from '../views/Components/stories/Empty';
 import ToastGallery from '../views/Components/stories/Toast';
 import AccountGallery from '../views/Components/stories/Account';
 import CheckBoxGallery from '../views/Components/stories/CheckBox';
+import InputCallery from '../views/Components/stories/Input';
+import SpinnerGallery from '../views/Components/stories/Spinner';
 
 type TabRoute = {
   icon: ICON_NAMES;
@@ -41,6 +43,7 @@ export const tabRoutes: TabRoute[] = [
 
 export const stackRoutes = [
   { name: 'Components/Address', component: AddressGallery },
+  { name: 'Components/Input', component: InputCallery },
   { name: 'Components/Avatar', component: AvatarGallery },
   { name: 'Components/Typography', component: TypographyGallery },
   { name: 'Components/Token', component: TokenGallery },
@@ -55,4 +58,5 @@ export const stackRoutes = [
   { name: 'Components/Toast', component: ToastGallery },
   { name: 'Components/Account', component: AccountGallery },
   { name: 'Components/CheckBox', component: CheckBoxGallery },
+  { name: 'Components/Spinner', component: SpinnerGallery },
 ];
