@@ -4,8 +4,6 @@
 import { useContext, createContext, useMemo } from 'react';
 import { useFonts } from 'expo-font';
 import { useToken } from 'native-base';
-import { useSafeAreaInsets as useRNSafeAreaInsets } from 'react-native-safe-area-context';
-
 import type { ThemeVariant } from './theme';
 import type { LocaleSymbol } from '../locale';
 import type { DeviceState } from './device';
@@ -63,8 +61,4 @@ const customFont = {
 
 export function useLoadCustomFonts() {
   return useFonts(customFont);
-}
-
-export function useSafeAreaInsets() {
-  return useRNSafeAreaInsets();
 }

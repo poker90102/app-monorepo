@@ -16,8 +16,7 @@ const Index = () => {
 
   const componentsRoute = stackRoutes
     .filter((item) => item.name.startsWith('Components'))
-    .map((item) => item.name)
-    .sort();
+    .map((item) => item.name);
 
   return (
     <FlatList
