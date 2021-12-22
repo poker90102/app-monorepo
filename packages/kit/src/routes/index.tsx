@@ -26,7 +26,6 @@ import SelectGallery from '../views/Components/stories/Select';
 import SortableListGallery from '../views/Components/stories/SortableList';
 import SpinnerGallery from '../views/Components/stories/Spinner';
 import SwitchGallery from '../views/Components/stories/Switch';
-import TabsGallery from '../views/Components/stories/Tabs';
 import TextareaGallery from '../views/Components/stories/Textarea';
 import ThemeGallery from '../views/Components/stories/Theme';
 import ToastGallery from '../views/Components/stories/Toast';
@@ -97,5 +96,4 @@ export const stackRoutes = [
   { name: 'Components/Dialog', component: DialogGallery },
   { name: 'Components/PageActions', component: PageActionsGallery },
   { name: 'Components/SortableList', component: SortableListGallery },
-  { name: 'Components/Tabs', component: TabsGallery },
 ];
