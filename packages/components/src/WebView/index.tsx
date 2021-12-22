@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unused-vars */
+// @ts-nocheck
+/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unused-vars, @typescript-eslint/no-unsafe-assignment */
 import React, { useEffect, useState } from 'react';
 
 import { Box, Button, HStack, Select, VStack } from '@onekeyhq/components';
+import providerApi from '@onekeyhq/inpage-provider/src/demo/providerApi';
 import { IJsBridgeMessagePayload } from '@onekeyhq/inpage-provider/src/types';
 import InpageProviderWebView from '@onekeyhq/inpage-provider/src/webview/InpageProviderWebView';
 import useWebViewBridge from '@onekeyhq/inpage-provider/src/webview/useWebViewBridge';
 import platformEnv from '@onekeyhq/shared/src/platformEnv';
-
-import backgroundApiProxy from '../../background/instance/backgroundApiProxy';
-import walletApi from '../../background/instance/walletApi';
 
 const { isDesktop, isExtension } = platformEnv;
 
@@ -19,11 +18,11 @@ const srcList = [
 ];
 
 function WebView({
-  src,
+  src = '',
   showDemoActions = false,
   showWalletActions = false,
 }: {
-  src: string;
+  src?: string;
   showDemoActions?: boolean;
   showWalletActions?: boolean;
 }): JSX.Element {
@@ -36,8 +35,8 @@ function WebView({
     if (!jsBridge) {
       return;
     }
-    backgroundApiProxy.connectBridge(jsBridge);
-    const onMessage = (event: IJsBridgeMessagePayload) => {
+    // window.webviewJsBridge = jsBridge;
+    jsBridge.on('message', (event: IJsBridgeMessagePayload) => {
       console.log('jsBridge onMessage', event);
       if ((event?.data as { method: string })?.method) {
         // handleProviderMethods(jsBridge, event, isApp);
@@ -54,12 +53,9 @@ function WebView({
           }
         }, 1500);
       }
-    };
-    // window.webviewJsBridge = jsBridge;
-    jsBridge.on('message', onMessage);
+    });
     return () => {
       // TODO off event
-      jsBridge.off('message', onMessage);
     };
   }, [jsBridge]);
 
@@ -71,43 +67,78 @@ function WebView({
           {showWalletActions && (
             <HStack space={2}>
               <Select
-                containerProps={{
-                  width: '180px',
-                  zIndex: 999,
-                }}
-                defaultValue={walletApi.chainId}
-                onChange={(value) => {
+                placeholder="Choose Chain"
+                minWidth="180"
+                defaultValue={providerApi.chainId}
+                onValueChange={(value) => {
                   setName(`${Date.now()}`);
-                  const chainId = value;
-                  backgroundApiProxy.changeChain(chainId);
+                  providerApi.chainId = value;
+                  if (isExtension) {
+                    window.extJsBridgeUiToBg.requestSync({
+                      data: {
+                        method: 'internal_changeChain',
+                        params: providerApi.chainId,
+                      },
+                    });
+                  } else {
+                    // TODO only notify to Dapp when isConnected?
+                    // method === 'metamask_chainChanged' && this.selectedAddress
+                    // notifyAllConnections
+                    jsBridge?.requestSync({
+                      data: {
+                        // metamask_accountsChanged
+                        // metamask_unlockStateChanged
+                        method: 'metamask_chainChanged',
+                        params: {
+                          chainId: providerApi.chainId,
+                          networkVersion: '1',
+                        },
+                      },
+                    });
+                  }
                 }}
-                options={['0x1', '0x2', '0x3', '0x4', '0x5', '0x2a'].map(
-                  (id) => ({
-                    value: id,
-                    label: `Chain ${id}`,
-                  }),
-                )}
-              />
+              >
+                {['0x1', '0x2', '0x3', '0x4', '0x5', '0x2a'].map((id) => (
+                  <Select.Item key={id} label={`Chain ${id}`} value={id} />
+                ))}
+              </Select>
               <Select
-                containerProps={{
-                  width: '180px',
-                  zIndex: 999,
-                }}
-                defaultValue={walletApi.selectedAddress}
-                onChange={(value) => {
+                minWidth="180"
+                placeholder="Choose Address"
+                defaultValue={providerApi.selectedAddress}
+                onValueChange={(value) => {
                   // TODO only notify to Dapp when isConnected?
-                  const selectedAddress = value;
-                  backgroundApiProxy.changeAccounts(selectedAddress);
+                  providerApi.selectedAddress = value;
+                  if (isExtension) {
+                    window.extJsBridgeUiToBg.requestSync({
+                      data: {
+                        method: 'internal_changeAccounts',
+                        params: providerApi.selectedAddress,
+                      },
+                    });
+                  } else if (providerApi.isConnected) {
+                    jsBridge?.requestSync({
+                      data: {
+                        method: 'metamask_accountsChanged',
+                        params: [providerApi.selectedAddress],
+                      },
+                    });
+                  }
                 }}
-                options={walletApi.accounts.map((address: string) => ({
-                  value: address,
-                  label: `${address.slice(0, 6)}...${address.slice(-4)}`,
-                }))}
-              />
+              >
+                {providerApi.accounts.map((address) => (
+                  <Select.Item
+                    key={address}
+                    label={`${address.slice(0, 6)}...${address.slice(-4)}`}
+                    value={address}
+                  />
+                ))}
+              </Select>
               <Button
                 size="xs"
                 onPress={() => {
-                  webviewRef.current?.reload();
+                  // electron webview reload()
+                  webviewRef.current.reload();
                 }}
               >
                 Reload
@@ -124,22 +155,19 @@ function WebView({
                 Toggle WebView Visible
               </Button>
               <Select
-                containerProps={{
-                  width: '360px',
-                  zIndex: 999,
-                }}
-                value={srcLocal}
-                onChange={(v) => setSrcLocal(v)}
-                options={srcList.map((uri) => ({
-                  value: uri,
-                  label: uri,
-                }))}
-              />
+                minWidth="360"
+                selectedValue={srcLocal}
+                onValueChange={(v) => setSrcLocal(v)}
+              >
+                {srcList.map((uri) => (
+                  <Select.Item key={uri} label={uri} value={uri} />
+                ))}
+              </Select>
 
               <HStack space={2}>
                 <Button
                   onPress={() => {
-                    walletApi.isConnected = false;
+                    providerApi.isConnected = false;
                     jsBridge?.request({
                       data: {
                         method: 'metamask_accountsChanged',
@@ -152,18 +180,18 @@ function WebView({
                 </Button>
                 <Button
                   onPress={() => {
-                    walletApi.isConnected = true;
+                    providerApi.isConnected = true;
                     jsBridge?.request({
                       data: {
                         method: 'metamask_accountsChanged',
-                        params: [walletApi.selectedAddress],
+                        params: [providerApi.selectedAddress],
                       },
                     });
                     jsBridge?.request({
                       data: {
                         method: 'metamask_chainChanged',
                         params: {
-                          chainId: walletApi.chainId,
+                          chainId: providerApi.chainId,
                           networkVersion: '1',
                         },
                       },
@@ -205,11 +233,11 @@ function WebView({
       )}
 
       <Box flex={1}>
-        {webviewVisible && srcLocal && (
+        {webviewVisible && (
           <InpageProviderWebView
             ref={setWebViewRef}
             src={srcLocal}
-            receiveHandler={backgroundApiProxy.bridgeReceiveHandler}
+            receiveHandler={providerApi.receiveHandler}
           />
         )}
       </Box>

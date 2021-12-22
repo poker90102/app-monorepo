@@ -3,7 +3,6 @@ import isPlainObject from 'lodash/isPlainObject';
 import isString from 'lodash/isString';
 
 import {
-  IInjectedProviderNamesStrings,
   IJsBridgeCallback,
   IJsBridgeConfig,
   IJsBridgeMessagePayload,
@@ -120,7 +119,6 @@ abstract class JsBridgeBase extends EventEmitter {
     id,
     remoteId,
     sync = false,
-    scope,
   }: IJsBridgeMessagePayload) {
     const executor = (
       resolve?: (value: unknown) => void,
@@ -140,7 +138,6 @@ abstract class JsBridgeBase extends EventEmitter {
           type,
           origin: global?.location?.origin || '',
           remoteId,
-          scope,
         },
         { resolve, reject },
       );
@@ -160,13 +157,7 @@ abstract class JsBridgeBase extends EventEmitter {
     }
   }
 
-  public receive(
-    payloadReceived: string | IJsBridgeMessagePayload = '',
-    sender?: {
-      origin?: string;
-      internal?: boolean;
-    },
-  ) {
+  public receive(payloadReceived: string | IJsBridgeMessagePayload = '') {
     let payload: IJsBridgeMessagePayload = {
       data: null,
     };
@@ -178,9 +169,6 @@ abstract class JsBridgeBase extends EventEmitter {
       // TODO try catch
       payload = JSON.parse(payloadReceived) as IJsBridgeMessagePayload;
     }
-
-    payload.origin = sender?.origin || payload.origin;
-    payload.internal = Boolean(sender?.internal);
 
     const { type, id, data, error, origin, remoteId } = payload;
     this.remoteInfo = {
@@ -250,18 +238,13 @@ abstract class JsBridgeBase extends EventEmitter {
   }
 
   // TODO requestTo(remoteId, data)
-  public request(info: {
-    data: unknown;
-    remoteId?: number | string | null;
-    scope?: IInjectedProviderNamesStrings;
-  }) {
-    const { data, remoteId, scope } = info;
+  public request(info: { data: unknown; remoteId?: number | string | null }) {
+    const { data, remoteId } = info;
     return this.send({
       type: IJsBridgeMessageTypes.REQUEST,
       data,
       remoteId,
       sync: false,
-      scope,
     });
   }
 

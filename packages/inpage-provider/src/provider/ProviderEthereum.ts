@@ -1,4 +1,4 @@
-import { IInjectedProviderNames, IInpageProviderRequestData } from '../types';
+import { IInpageProviderRequestData } from '../types';
 
 import ProviderBase, { IInpageProviderConfig } from './ProviderBase';
 
@@ -7,8 +7,6 @@ class ProviderEthereum extends ProviderBase {
     super(config);
     this.initProviderState();
   }
-
-  protected providerName = IInjectedProviderNames.ethereum;
 
   public isMetaMask = true;
 
@@ -72,10 +70,7 @@ class ProviderEthereum extends ProviderBase {
     // method: "eth_requestAccounts", params: []
     // method: "eth_accounts", params: []
     console.log('ethereum.request', req);
-    const res = (await this.bridge.request({
-      data: req ?? {},
-      scope: this.providerName,
-    })) as {
+    const res = (await this.bridge.request({ data: req })) as {
       result: unknown;
     };
     if (req.method === 'eth_accounts' || req.method === 'eth_requestAccounts') {

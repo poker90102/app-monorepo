@@ -8,8 +8,7 @@
     "@onekeyhq/connect": "8.7.0-extended",
     "@reduxjs/toolkit": "^1.6.2",
     "react-intl": "^5.21.2",
-    "react-redux": "^7.2.6",
-    "react-native-url-polyfill": "^1.3.0"
+    "react-redux": "^7.2.6"
   },
   "devDependencies": {},
   "scripts": {

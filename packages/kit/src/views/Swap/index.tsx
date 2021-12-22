@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { Box } from '@onekeyhq/components';
-
-import WebView from '../../components/WebView';
+import { Box, WebView } from '@onekeyhq/components';
 
 const Swap = () => (
   <Box flex="1" bg="background-hovered">

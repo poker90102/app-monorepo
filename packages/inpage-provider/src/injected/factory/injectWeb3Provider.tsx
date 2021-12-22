@@ -30,7 +30,7 @@ function injectWeb3Provider() {
   window.$onekey = $onekey;
   // TODO conflict with MetaMask
   window.ethereum = ethereum;
-  // window.web3 = ethereum; // dapp create web3.js or ethers.js itself
+  window.web3 = ethereum;
   return $onekey;
 }
 export default injectWeb3Provider;

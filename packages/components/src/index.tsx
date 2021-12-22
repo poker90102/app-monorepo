@@ -39,12 +39,14 @@ export { Toast, useToast } from './Toast';
 export { default as Token, TokenGroup } from './Token';
 export { default as Typography } from './Typography';
 export { default as VStack } from './VStack';
+export { default as WebView } from './WebView';
 export { default as ZStack } from './ZStack';
 export { default as Dialog } from './Dialog';
 export { default as PageActions } from './PageActions';
 export { default as Form } from './Form';
 export { default as Image } from './Image';
 export { default as SortableList } from './SortableList';
+export { default as TabView, SceneMap } from './TabView';
 
 export * from './TabBar/Tab';
 export * from './Provider/hooks';

@@ -1,8 +1,14 @@
 import React from 'react';
 
-import { Box, Button, Switch, useLocale, useTheme } from '@onekeyhq/components';
+import {
+  Box,
+  Button,
+  Switch,
+  WebView,
+  useLocale,
+  useTheme,
+} from '@onekeyhq/components';
 
-import WebView from '../../components/WebView';
 import useNavigation from '../../hooks/useNavigation';
 
 const Settings = () => {
@@ -29,11 +35,7 @@ const Settings = () => {
         isChecked={locale === 'zh-CN'}
         onToggle={() => setLocale(locale === 'zh-CN' ? 'en-US' : 'zh-CN')}
       />
-      <WebView
-        src="https://app.uniswap.org/#/swap"
-        showWalletActions
-        showDemoActions
-      />
+      <WebView showWalletActions showDemoActions />
     </Box>
   );
 };

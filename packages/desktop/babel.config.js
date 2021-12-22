@@ -1,6 +1,12 @@
-const babelTools = require('../../development/babelTools');
-
-module.exports = babelTools.normalizeConfig({
+module.exports = {
   presets: ['@expo/next-adapter/babel'],
-  plugins: [],
-});
+  plugins: [
+    [
+      'babel-plugin-inline-import',
+      {
+        'extensions': ['.text-js'],
+      },
+    ],
+    '@babel/plugin-proposal-class-properties',
+  ],
+};

@@ -92,18 +92,11 @@ const DesktopWebView = forwardRef(
       const handleMessage = (event: {
         channel: string;
         args: Array<string>;
-        target: IElectronWebView;
       }) => {
         if (event.channel === JS_BRIDGE_MESSAGE_IPC_CHANNEL) {
           const data: string = event?.args?.[0];
-          let origin = '';
-          const url = event.target.getURL();
-          if (url) {
-            const uri = new URL(url);
-            origin = uri.origin;
-          }
           // - receive
-          jsBridge.receive(data, { origin });
+          jsBridge.receive(data);
         }
 
         // response back

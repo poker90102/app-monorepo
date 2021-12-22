@@ -53,18 +53,11 @@ class JsBridgeExtBackground extends JsBridgeBase {
         this.portIdIndex += 1;
         const portId = this.portIdIndex;
         this.ports[portId] = port;
-        const onMessage = (
-          payload: IJsBridgeMessagePayload,
-          port0: chrome.runtime.Port,
-        ) => {
-          const origin = port0.sender?.origin || '';
+        const onMessage = (payload: IJsBridgeMessagePayload) => {
           payload.remoteId = portId;
           // TODO if EXT_PORT_CS_TO_BG ignore "internal_" prefix methods
           //    ignore scope=walletPrivate
-          this.receive(payload, {
-            origin,
-            internal: port.name === EXT_PORT_UI_TO_BG,
-          });
+          this.receive(payload);
         };
         // #### content-script -> background
         port.onMessage.addListener(onMessage);
@@ -81,12 +74,12 @@ class JsBridgeExtBackground extends JsBridgeBase {
   }
 
   requestToAllCS(data: unknown) {
-    // TODO optimize rename: broadcastRequest
+    // TODO optimize
     Object.entries(this.ports).forEach(([portId, port]) => {
       if (port.name === EXT_PORT_CS_TO_BG) {
-        console.log(`notify to content-script port: ${portId}`, data);
+        console.log(`notify to content-script port: ${portId}`);
         // TODO check ports disconnected
-        this.requestSync({
+        this.request({
           data,
           remoteId: portId,
         });
@@ -100,7 +93,7 @@ class JsBridgeExtBackground extends JsBridgeBase {
       if (port.name === EXT_PORT_UI_TO_BG) {
         console.log(`notify to ui port: ${portId}`);
         // TODO check ports disconnected
-        this.requestSync({
+        this.request({
           data,
           remoteId: portId,
         });

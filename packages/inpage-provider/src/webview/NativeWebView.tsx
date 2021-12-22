@@ -60,11 +60,9 @@ const NativeWebView = forwardRef(
         // TODO useCallback
         onMessage={(event) => {
           const { data }: { data: string } = event.nativeEvent;
-          const uri = new URL(event.nativeEvent.url);
-          const { origin } = uri;
-          console.log('NativeWebView receive message', origin, data);
+          console.log('NativeWebView receive message', data);
           // - receive
-          jsBridge.receive(data, { origin });
+          jsBridge.receive(data);
         }}
       />
     );
