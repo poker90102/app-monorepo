@@ -1,8 +1,8 @@
 import { HasName } from './base';
 
 type Token = HasName & {
-  networkId: string;
-  tokenIdOnNetwork: string;
+  chainId: string;
+  tokenId: string;
   symbol: string;
   decimals: number;
   logoURI: string;

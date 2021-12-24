@@ -6,11 +6,7 @@ import { DbApi } from './db';
 import { DBAPI } from './db/base';
 import { NotImplemented, OneKeyInternalError } from './errors';
 import { fromDBNetworkToNetwork, getEVMNetworkToCreate } from './networks';
-import {
-  getPresetTokensOnNetwork,
-  networkIsPreset,
-  presetNetworks,
-} from './presets';
+import { networkIsPreset, presetNetworks } from './presets';
 import { Account, ImportableHDAccount } from './types/account';
 import {
   AddNetworkParams,
@@ -23,7 +19,7 @@ import { Token } from './types/token';
 import { Wallet } from './types/wallet';
 
 class Engine {
-  private dbApi: DBAPI;
+  dbApi: DBAPI;
 
   constructor() {
     this.dbApi = new DbApi() as DBAPI;
@@ -162,78 +158,35 @@ class Engine {
     throw new NotImplemented();
   }
 
-  private getOrAddToken(
+  addTokenToAccount(
+    accountId: string,
     networkId: string,
-    tokenIdOnNetwork: string,
-  ): Promise<Token | null> {
-    const tokenId = `${networkId}--${tokenIdOnNetwork}`;
-    return this.dbApi.getToken(tokenId).then((token: Token | null) => {
-      if (token === null) {
-        // TODO: get token info online, read other info from preset add it to db.
-        return this.dbApi.addToken({
-          id: tokenId,
-          name: 'TESTING',
-          networkId,
-          tokenIdOnNetwork,
-          symbol: 'TTT',
-          decimals: 18,
-          logoURI: '',
-        });
-      }
-      return token;
-    });
-  }
-
-  addTokenToAccount(accountId: string, tokenId: string): Promise<Token> {
+    tokenId: string,
+    logoURI?: string,
+  ): Promise<Token> {
     // Add an token to account.
-    return this.dbApi.addTokenToAccount(accountId, tokenId);
+    console.log(
+      `addTokenToAccount ${accountId} ${networkId} ${tokenId} ${logoURI || ''}`,
+    );
+    throw new NotImplemented();
   }
 
-  removeTokenFromAccount(accountId: string, tokenId: string): Promise<void> {
-    // Remove token from an account.
-    return this.dbApi.removeTokenFromAccount(accountId, tokenId);
-  }
-
-  preAddToken(
+  removeTokenFromAccount(
     accountId: string,
     networkId: string,
     tokenIdOnNetwork: string,
-  ): Promise<[number, Token] | null> {
-    // 1. find local token
-    // 2. if not, find token online
-    // 3. get token balance
-    // 4. return
-    // TODO: checkout account and network is compatible.
-    // TODO: logoURI?
-    return this.getOrAddToken(networkId, tokenIdOnNetwork).then(
-      (token: Token | null) => {
-        if (token === null) {
-          return null;
-        }
-        return [0, token];
-        // TODO: get balance
-      },
+  ): Promise<void> {
+    // Remove token from an account.
+    console.log(
+      `removeTokenFromAccount ${accountId} ${networkId} ${tokenIdOnNetwork}`,
     );
+    throw new NotImplemented();
   }
 
   getTokens(networkId: string, accountId?: string): Promise<Array<Token>> {
     // Get token info by network and account.
-    return this.dbApi
-      .getTokens(networkId, accountId)
-      .then((tokens: Array<Token>) => {
-        if (typeof accountId !== 'undefined') {
-          return tokens;
-        }
-        const existingTokens = new Set(
-          tokens.map((token: Token) => token.tokenIdOnNetwork),
-        );
-
-        return tokens.concat(
-          getPresetTokensOnNetwork(networkId).filter(
-            (token: Token) => !existingTokens.has(token.tokenIdOnNetwork),
-          ),
-        );
-      });
+    console.log(`getTokens ${networkId} ${accountId || ''}`);
+    throw new NotImplemented();
   }
 
   // TODO: transfer, sign & broadcast.

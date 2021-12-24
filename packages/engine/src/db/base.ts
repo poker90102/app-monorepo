@@ -1,5 +1,4 @@
 import { DBNetwork, UpdateNetworkParams } from '../types/network';
-import { Token } from '../types/token';
 
 interface DBAPI {
   listNetworks(): Promise<Array<DBNetwork>>;
@@ -11,12 +10,6 @@ interface DBAPI {
     params: UpdateNetworkParams,
   ): Promise<DBNetwork>;
   deleteNetwork(networkId: string): Promise<void>;
-
-  addToken(token: Token): Promise<Token>;
-  getToken(tokenId: string): Promise<Token | null>;
-  getTokens(networkId: string, accountId?: string): Promise<Array<Token>>;
-  addTokenToAccount(accountId: string, tokenId: string): Promise<Token>;
-  removeTokenFromAccount(accountId: string, tokenId: string): Promise<void>;
 }
 
 export type { DBAPI };
