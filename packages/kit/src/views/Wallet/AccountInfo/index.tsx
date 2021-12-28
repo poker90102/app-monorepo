@@ -10,8 +10,6 @@ import {
   useUserDevice,
 } from '@onekeyhq/components';
 
-import Transaction from '../../Transaction/transaction';
-
 const AccountInfo = () => {
   const { size: accountInfoSize } = useUserDevice();
   const intl = useIntl();
@@ -35,17 +33,13 @@ const AccountInfo = () => {
   const AccountOption = useCallback(
     () => (
       <Box flexDirection="row" mt={8} justifyContent="center">
-        <Transaction
-          trigger={
-            <Button
-              leftIcon={<Icon name="ArrowSmUpOutline" />}
-              minW="126px"
-              type="basic"
-            >
-              {intl.formatMessage({ id: 'action__send' })}
-            </Button>
-          }
-        />
+        <Button
+          leftIcon={<Icon name="ArrowSmUpOutline" />}
+          minW="126px"
+          type="basic"
+        >
+          {intl.formatMessage({ id: 'action__send' })}
+        </Button>
         <Button
           ml={4}
           leftIcon={<Icon name="ArrowSmDownOutline" />}

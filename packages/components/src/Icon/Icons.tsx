@@ -483,7 +483,6 @@ import VolumeUpSolid from "./react/solid/VolumeUp";
 import WifiSolid from "./react/solid/Wifi";
 import ZoomInSolid from "./react/solid/ZoomIn";
 import ZoomOutSolid from "./react/solid/ZoomOut";
-import ScanSolid from "./react/solid/Scan";
 
 export type ICON_NAMES =
   | "BrandLogoIllus"
@@ -917,7 +916,6 @@ export type ICON_NAMES =
   | "SaveSolid"
   | "SaveAsSolid"
   | "ScaleSolid"
-  | "ScanSolid"
   | "ScissorsSolid"
   | "SearchSolid"
   | "SearchCircleSolid"
@@ -1403,7 +1401,6 @@ export default {
   SaveSolid: SaveSolid,
   SaveAsSolid: SaveAsSolid,
   ScaleSolid: ScaleSolid,
-  ScanSolid: ScanSolid,
   ScissorsSolid: ScissorsSolid,
   SearchSolid: SearchSolid,
   SearchCircleSolid: SearchCircleSolid,
