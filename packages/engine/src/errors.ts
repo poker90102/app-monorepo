@@ -12,8 +12,4 @@ class OneKeyInternalError extends OneKeyError {
   key = 'onekey_error_internal';
 }
 
-class AccountAlreadyExists extends OneKeyError {
-  key = 'onekey_error_account_already_exists';
-}
-
-export { NotImplemented, OneKeyInternalError, AccountAlreadyExists };
+export { NotImplemented, OneKeyInternalError };

@@ -1,5 +1,4 @@
 import { HasName } from './base';
-import { Token } from './token';
 
 const ACCOUNT_TYPE_SIMPLE = 'simple';
 const ACCOUNT_TYPE_MULADDR = 'muladdr';
@@ -7,26 +6,11 @@ const ACCOUNT_TYPE_MULADDR = 'muladdr';
 
 type AccountType = 'simple' | 'muladdr';
 
-type DBBaseAccount = HasName & {
+type BaseAccount = HasName & {
   type: AccountType;
   path: string;
   coinType: string;
-};
-
-type DBSimpleAccount = DBBaseAccount & {
-  pub: string;
-  address: string;
-};
-
-type DBMulAddrAccount = DBBaseAccount & {
-  xpub: string;
-  addresses: Record<string, string>;
-};
-
-type DBAccount = DBSimpleAccount | DBMulAddrAccount;
-
-type BaseAccount = DBBaseAccount & {
-  tokens: Array<Token>;
+  tokens: Array<string>;
 };
 
 type SimpleAccount = BaseAccount & {
@@ -50,9 +34,6 @@ type ImportableHDAccount = {
 export { ACCOUNT_TYPE_SIMPLE, ACCOUNT_TYPE_MULADDR };
 export type {
   AccountType,
-  DBSimpleAccount,
-  DBMulAddrAccount,
-  DBAccount,
   SimpleAccount,
   MulAddrAccount,
   Account,
