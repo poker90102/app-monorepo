@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 
-import { useIntl } from 'react-intl';
-
 import { Dialog } from '@onekeyhq/components';
 
 type DiscardAlertProps = {
@@ -14,40 +12,29 @@ export const DiscardAlert: FC<DiscardAlertProps> = ({
   visible,
   onClose,
   onConfirm,
-}) => {
-  const intl = useIntl();
-  return (
-    <Dialog
-      visible={visible}
-      contentProps={{
-        iconType: 'info',
-        title: intl.formatMessage({
-          id: 'dialog__discard_changes_title',
-          defaultMessage: 'Discard Changes',
-        }),
-        content: intl.formatMessage({
-          id: 'dialog__discard_changes_desc',
-          defaultMessage: 'Are you sure to discard the unsaved changes',
-        }),
-      }}
-      footerButtonProps={{
-        onPrimaryActionPress: ({ onClose: handleClose }) => {
-          handleClose?.();
-          setTimeout(() => {
-            onConfirm?.();
-          }, 100);
-        },
-        primaryActionTranslationId: 'action__discard',
-        secondaryActionTranslationId: 'action__cancel',
-        primaryActionProps: {
-          type: 'primary',
-          size: 'xl',
-        },
-        secondaryActionProps: {
-          size: 'xl',
-        },
-      }}
-      onClose={onClose}
-    />
-  );
-};
+}) => (
+  <Dialog
+    visible={visible}
+    contentProps={{
+      iconType: 'info',
+      title: 'Discard Changes',
+      content: 'Are you sure to discard the unsaved changes',
+    }}
+    footerButtonProps={{
+      onPrimaryActionPress: ({ onClose: handleClose }) => {
+        handleClose?.();
+        setTimeout(() => {
+          onConfirm?.();
+        }, 100);
+      },
+      primaryActionProps: {
+        type: 'primary',
+        size: 'xl',
+      },
+      secondaryActionProps: {
+        size: 'xl',
+      },
+    }}
+    onClose={onClose}
+  />
+);

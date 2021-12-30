@@ -8,6 +8,4 @@ type FormTextareaProps = {
 
 export const FormTextarea: FC<
   FormTextareaProps & ComponentProps<typeof Textarea>
-> = ({ onChange, ...props }) => (
-  <Textarea w="full" {...props} onChangeText={onChange} />
-);
+> = ({ onChange, ...props }) => <Textarea {...props} onChangeText={onChange} />;

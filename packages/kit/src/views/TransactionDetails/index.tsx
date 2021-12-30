@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useRef } from 'react';
+import React, { FC } from 'react';
 
 import { useIntl } from 'react-intl';
 
@@ -11,13 +11,10 @@ import {
   Icon,
   Pressable,
   ScrollView,
-  Toast,
   Typography,
-  useToast,
 } from '@onekeyhq/components';
 import { ICON_NAMES } from '@onekeyhq/components/src/Icon';
 
-import { copyToClipboard } from '../../utils/ClipboardUtils';
 import { formatDate } from '../../utils/DateUtils';
 import {
   Transaction,
@@ -46,19 +43,8 @@ const getTxInfo = (_txId: string): Transaction => ({
  */
 const TransactionDetails: FC<TransactionDetailsProps> = ({ txId }) => {
   const intl = useIntl();
-  const toast = useToast();
-  const toastIdRef = useRef<string>();
 
   const txInfo = getTxInfo(txId);
-
-  const showToast = useCallback(
-    (msg: string) => {
-      toastIdRef.current = toast.show({
-        render: () => <Toast title={msg} status="success" dismiss />,
-      }) as string;
-    },
-    [toast],
-  );
 
   const getTransactionStatusIcon = (
     state: TransactionState = 'pending',
@@ -84,11 +70,6 @@ const TransactionDetails: FC<TransactionDetailsProps> = ({ txId }) => {
     return stringKeys[state];
   };
 
-  const copyAddressToClipboard = () => {
-    copyToClipboard(txInfo.txId);
-    showToast(intl.formatMessage({ id: 'msg__copied' }));
-  };
-
   return (
     <ScrollView>
       <Box flexDirection="column" alignItems="center">
@@ -103,7 +84,7 @@ const TransactionDetails: FC<TransactionDetailsProps> = ({ txId }) => {
           <ContentItem title={intl.formatMessage({ id: 'content__hash' })}>
             <Box flexDirection="row">
               <Address text={txInfo.txId} short />
-              <Pressable ml={3} onPress={copyAddressToClipboard}>
+              <Pressable ml={3} onPress={() => {}}>
                 <Icon name="ClipboardCopySolid" />
               </Pressable>
             </Box>
@@ -115,7 +96,8 @@ const TransactionDetails: FC<TransactionDetailsProps> = ({ txId }) => {
           />
           <ContentItem
             title={intl.formatMessage({ id: 'content__to' })}
-            value="0xd3f1530766492bf1be9a2ccda487c556d21f1ab8"
+            value="Account2"
+            describe="0x4d16878c27c3847f18bd6d51d67f5b83b52ffe75"
           />
           <ContentItem
             title={intl.formatMessage({ id: 'content__amount' })}

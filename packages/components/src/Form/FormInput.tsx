@@ -9,4 +9,4 @@ type FormInputProps = {
 export const FormInput: FC<FormInputProps & ComponentProps<typeof Input>> = ({
   onChange,
   ...props
-}) => <Input w="full" {...props} onChangeText={onChange} />;
+}) => <Input {...props} onChangeText={onChange} />;

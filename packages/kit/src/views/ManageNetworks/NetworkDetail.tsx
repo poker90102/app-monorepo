@@ -1,7 +1,5 @@
 import React, { FC, ReactElement, useCallback, useState } from 'react';
 
-import { useIntl } from 'react-intl';
-
 import {
   Box,
   Button,
@@ -33,7 +31,6 @@ export const NetworkDetail: FC<NetworksProps> = ({
   const { control, handleSubmit, reset } = useForm<NetworkValues>({
     defaultValues,
   });
-  const intl = useIntl();
   const [resetOpened, setResetOpened] = useState(false);
   const onReset = useCallback(() => {
     setResetOpened(true);
@@ -57,31 +54,18 @@ export const NetworkDetail: FC<NetworksProps> = ({
           justifyContent="center"
         >
           <Form>
-            <Form.Item
-              name="name"
-              label={intl.formatMessage({
-                id: 'form__network_name',
-                defaultMessage: 'Network Name',
-              })}
-              control={control}
-            >
-              <Form.Input />
+            <Form.Item name="name" label="Network Name" control={control}>
+              <Form.Input placeholder="network name" />
             </Form.Item>
             <Form.Item
               name="url"
               control={control}
-              label={intl.formatMessage({
-                id: 'form__rpc_url',
-                defaultMessage: 'RPC URL',
-              })}
+              label="rpcUrl"
               defaultValue="https://rpc.onekey.so/eth"
               formControlProps={{ zIndex: 10, maxW: '80' }}
             >
               <Form.Select
-                title={intl.formatMessage({
-                  id: 'content__preset_rpc',
-                  defaultMessage: 'Preset PRC URLs',
-                })}
+                title="Preset PRC URLs"
                 footer={null}
                 containerProps={{
                   zIndex: 999,
@@ -106,41 +90,21 @@ export const NetworkDetail: FC<NetworksProps> = ({
                 ]}
               />
             </Form.Item>
-            <Form.Item
-              name="chainId"
-              label={intl.formatMessage({
-                id: 'form__chain_id',
-                defaultMessage: 'Chain ID',
-              })}
-              control={control}
-            >
+            <Form.Item name="chainId" label="ChainID" control={control}>
               <Form.Input placeholder="chain id" />
             </Form.Item>
-            <Form.Item
-              name="symbol"
-              label={intl.formatMessage({
-                id: 'form__symbol',
-                defaultMessage: 'Symbol',
-              })}
-              control={control}
-            >
+            <Form.Item name="symbol" label="Symbol" control={control}>
               <Form.Input placeholder="ETH" />
             </Form.Item>
             <Form.Item
               name="exploreUrl"
-              label={intl.formatMessage({
-                id: 'form__blockchain_explorer_url',
-                defaultMessage: 'Blockchain Explore URL',
-              })}
+              label="Blockchain Explore URL"
               control={control}
             >
-              <Form.Input />
+              <Form.Input placeholder="Blockchain Explore URL" />
             </Form.Item>
             <Button w="80" onPress={onReset} mt="2">
-              {intl.formatMessage({
-                id: 'action__reset',
-                defaultMessage: 'Reset',
-              })}
+              Reset
             </Button>
           </Form>
         </Box>
@@ -149,25 +113,14 @@ export const NetworkDetail: FC<NetworksProps> = ({
         visible={resetOpened}
         contentProps={{
           iconType: 'info',
-          title: intl.formatMessage({
-            id: 'dialog__reset_network_title',
-            defaultMessage: 'Reset Network',
-          }),
-          content: intl.formatMessage(
-            {
-              id: 'dialog__reset_network_desc',
-              defaultMessage:
-                'Ethereum Mainnet will be revert to the default config',
-            },
-            { 0: 'Ethereum Mainnet' },
-          ),
+          title: 'Reset Network',
+          content: 'Ethereum Mainnet will be revert to the default config',
         }}
         footerButtonProps={{
           onPrimaryActionPress: ({ onClose }) => {
             reset(defaultValues);
             onClose?.();
           },
-          primaryActionTranslationId: 'action_reset',
           primaryActionProps: {
             type: 'primary',
             size: 'xl',

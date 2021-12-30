@@ -20,12 +20,12 @@ const AccountInfo = () => {
   const AccountAmountInfo = useCallback(
     (isCenter: boolean) => (
       <Box alignItems={isCenter ? 'center' : 'flex-start'} mt={8}>
-        <Typography.Subheading color="text-subdued">
-          {intl.formatMessage({ id: 'asset__total_balance' }).toUpperCase()}
+        <Typography.Subheading>
+          {intl.formatMessage({ id: 'asset__total_balance' })}
         </Typography.Subheading>
         <Box flexDirection="row" mt={2}>
           <Typography.DisplayXLarge>10.100</Typography.DisplayXLarge>
-          <Typography.DisplayXLarge pl={2}>ETH</Typography.DisplayXLarge>
+          <Typography.DisplayXLarge>ETH</Typography.DisplayXLarge>
         </Box>
         <Typography.Body2 mt={1}>43123.12 USD</Typography.Body2>
       </Box>
@@ -39,7 +39,7 @@ const AccountInfo = () => {
         <Transaction
           trigger={
             <Button
-              leftIcon={<Icon name="ArrowSmUpSolid" />}
+              leftIcon={<Icon name="ArrowSmUpOutline" />}
               minW="126px"
               type="basic"
             >
@@ -51,7 +51,7 @@ const AccountInfo = () => {
           trigger={
             <Button
               ml={4}
-              leftIcon={<Icon name="ArrowSmDownSolid" />}
+              leftIcon={<Icon name="ArrowSmDownOutline" />}
               minW="126px"
               type="basic"
             >
