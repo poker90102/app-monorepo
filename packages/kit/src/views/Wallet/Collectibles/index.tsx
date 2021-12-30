@@ -100,6 +100,10 @@ const Collectibles = () => {
           <HStack alignItems="center" justifyContent="space-between">
             <Typography.Heading>Collectibles</Typography.Heading>
             <SegmentedControl
+              containerProps={{
+                width: 70,
+                height: 35,
+              }}
               options={[
                 {
                   iconName: 'ViewListSolid',

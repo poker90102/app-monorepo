@@ -150,12 +150,7 @@ export const Heading: FC<FontProps> = ({ children, ...rest }) => (
   </Text>
 );
 export const Subheading: FC<FontProps> = ({ children, ...rest }) => (
-  <Text
-    color="text-default"
-    textTransform="uppercase"
-    {...SubheadingProps}
-    {...rest}
-  >
+  <Text color="text-default" {...SubheadingProps} {...rest}>
     {children}
   </Text>
 );

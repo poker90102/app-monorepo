@@ -3,7 +3,6 @@ import React, { ComponentProps, FC } from 'react';
 import { Button as NativeBaseButton } from 'native-base';
 
 import Icon, { ICON_NAMES } from '../Icon';
-import { Spinner } from '../Spinner';
 
 export type ButtonSize = 'base' | 'xs' | 'sm' | 'lg' | 'xl';
 export type ButtonType =
@@ -111,7 +110,7 @@ const BasicButton: FC<ButtonPropsWithoutType> = ({
         bg: 'action-secondary-disabled',
         borderColor: 'border-disabled',
       }}
-      spinner={<Spinner size="sm" />}
+      _spinner={{ size: iconSize }}
       shadow="1"
       {...props}
     >
@@ -161,7 +160,7 @@ const PrimaryButton: FC<ButtonPropsWithoutType> = ({
       _pressed={{ bg: 'action-primary-hovered' }}
       _loading={{ bg: 'action-primary-disabled' }}
       _disabled={{ bg: 'action-primary-disabled', color: 'text-disabled' }}
-      spinner={<Spinner size="sm" />}
+      _spinner={{ size: iconSize }}
       {...props}
     >
       {children}
@@ -207,7 +206,7 @@ const PlainButton: FC<ButtonPropsWithoutType> = ({
       _pressed={{ bg: undefined }}
       _focus={{ bg: undefined }}
       _disabled={{ color: 'text-disabled' }}
-      spinner={<Spinner size="sm" />}
+      _spinner={{ size: iconSize }}
       {...props}
     >
       {children}
@@ -262,7 +261,6 @@ const DestructiveButton: FC<ButtonPropsWithoutType> = ({
         bg: 'action-critical-hovered',
       }}
       _spinner={{ size: iconSize }}
-      spinner={<Spinner size="sm" />}
       shadow="1"
       {...props}
     >
@@ -321,7 +319,7 @@ const OutlineButton: FC<ButtonPropsWithoutType> = ({
         borderColor: 'border-disabled',
         _text: { color: 'text-disabled' },
       }}
-      spinner={<Spinner size="sm" />}
+      _spinner={{ size: iconSize }}
       shadow="1"
       {...props}
     >

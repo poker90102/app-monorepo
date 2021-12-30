@@ -41,28 +41,27 @@ const SegmentedControl: FC<SegmentedControlProps> = ({
   >(({ label, iconProps = {}, iconName }, active) => {
     if (typeof label === 'string') {
       return (
-        <Typography.Body2Strong
-          color={active ? 'text-default' : 'text-subdued'}
-        >
+        <Typography.Body2 color={active ? 'text-default' : 'text-subdued'}>
           {label}
-        </Typography.Body2Strong>
+        </Typography.Body2>
       );
     }
     if (iconName) {
       return (
-        <Icon
-          size={20}
-          {...iconProps}
-          name={iconName}
-          color={active ? 'icon-hovered' : 'icon-default'}
-        />
+        <Box p="2">
+          <Icon
+            {...iconProps}
+            name={iconName}
+            color={active ? 'icon-hovered' : 'icon-default'}
+          />
+        </Box>
       );
     }
     return label;
   }, []);
 
   return (
-    <Box bgColor={bgColor} borderRadius="12px" {...containerProps}>
+    <Box w="100%" {...containerProps}>
       <BaseSegmentedControl
         activeTintColor={activeBgColor}
         inactiveTintColor={bgColor}
@@ -70,15 +69,10 @@ const SegmentedControl: FC<SegmentedControlProps> = ({
         initialSelectedName={defaultValue}
         style={{
           backgroundColor: bgColor,
-          height: 36,
-          marginRight: 2,
-          borderRadius: 12,
         }}
         sliderStyle={{
           backgroundColor: activeBgColor,
           shadowColor,
-          height: 32,
-          borderRadius: 12,
         }}
         {...rest}
       >
@@ -91,9 +85,6 @@ const SegmentedControl: FC<SegmentedControlProps> = ({
             content={({ active }: { active: boolean }) =>
               renderContent(option, active)
             }
-            style={{
-              padding: 6,
-            }}
           />
         ))}
       </BaseSegmentedControl>

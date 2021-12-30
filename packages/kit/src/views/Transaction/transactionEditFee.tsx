@@ -13,6 +13,7 @@ import {
   SegmentedControl,
   Typography,
   useForm,
+  useThemeValue,
   useUserDevice,
 } from '@onekeyhq/components';
 
@@ -149,6 +150,7 @@ const TransactionEditFee = ({ ...rest }) => {
         </Typography.Body1Strong>
       </Button>
     );
+  const bgColor = useThemeValue('surface-neutral-default');
 
   return (
     <Modal
@@ -172,6 +174,13 @@ const TransactionEditFee = ({ ...rest }) => {
     >
       <Column flex="1">
         <SegmentedControl
+          style={{
+            height: '36px',
+            backgroundColor: bgColor,
+          }}
+          containerProps={{
+            width: '100%',
+          }}
           options={[
             {
               label: intl.formatMessage({ id: 'content__standard' }),
