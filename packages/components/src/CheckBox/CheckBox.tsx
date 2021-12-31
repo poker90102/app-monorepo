@@ -104,25 +104,11 @@ const CheckBox: FC<CheckBoxProps> = ({
           }}
           _hover={{
             value,
-            borderColor: isChecked
-              ? 'action-primary-default'
-              : 'border-hovered',
+            bg: 'action-primary-hovered',
+            borderColor: 'border-hovered',
             _interactionBox: {
               value: '',
-              bg: 'surface-hovered',
-            },
-          }}
-          // @ts-ignore
-          _focus={{
-            _interactionBox: {
-              value: '',
-              bg: 'action-primary-focus',
-            },
-          }}
-          // @ts-ignore
-          _focusVisible={{
-            _interactionBox: {
-              bg: 'action-primary-focus',
+              bg: 'action-secondary-hovered',
             },
           }}
           _checked={{
@@ -160,8 +146,8 @@ const CheckBox: FC<CheckBoxProps> = ({
           }}
         >
           <Typography.Body2
-            fontWeight="bold"
             selectable={false}
+            fontWeight="bold"
             color={titleColor}
           >
             {title}

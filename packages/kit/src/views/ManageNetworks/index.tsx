@@ -36,9 +36,9 @@ const ModalFooter: FC<ModalFooterProps> = ({ editable, onToggle }) => {
   );
 };
 
-type NetworksProps = { onClose: () => void };
+type NetworksProps = { opened: boolean; onClose: () => void };
 
-const Networks: FC<NetworksProps> = ({ onClose }) => {
+const Networks: FC<NetworksProps> = ({ opened, onClose }) => {
   const intl = useIntl();
   const [alertOpened, setAlertOpened] = useState(false);
   const [changed] = useState(true);
@@ -70,21 +70,19 @@ const Networks: FC<NetworksProps> = ({ onClose }) => {
 
   return (
     <>
-      {/* {children} */}
       <Modal
+        visible={opened}
         header={intl.formatMessage({ id: 'action__customize_network' })}
         onClose={onPrepareClose}
         footer={<ModalFooter editable={editable} onToggle={onToggle} />}
       >
-        <>
-          {children}
-          <DiscardAlert
-            visible={alertOpened}
-            onConfirm={onCloseModal}
-            onClose={onCloseAlert}
-          />
-        </>
+        {children}
       </Modal>
+      <DiscardAlert
+        visible={alertOpened}
+        onConfirm={onCloseModal}
+        onClose={onCloseAlert}
+      />
     </>
   );
 };

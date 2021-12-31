@@ -6,13 +6,9 @@ import AccountSelectorChildren from './AccountSelectorChildren';
 
 type ChildDropdownProps = {
   visible: boolean;
-  handleToggleVisible: () => void;
 };
 
-const AccountSelectorDesktop: FC<ChildDropdownProps> = ({
-  visible,
-  handleToggleVisible,
-}) => {
+const AccountSelectorDesktop: FC<ChildDropdownProps> = ({ visible }) => {
   if (!visible) return null;
 
   return (
@@ -29,7 +25,7 @@ const AccountSelectorDesktop: FC<ChildDropdownProps> = ({
       borderWidth="1px"
       flexDirection="row"
     >
-      <AccountSelectorChildren handleToggleVisible={handleToggleVisible} />
+      <AccountSelectorChildren />
     </Box>
   );
 };

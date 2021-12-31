@@ -1,30 +1,18 @@
-import React, { FC, useCallback, useMemo } from 'react';
-
-import { useNavigation } from '@react-navigation/core';
-import { useIntl } from 'react-intl';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 
 import { Box, Select, useUserDevice } from '@onekeyhq/components';
 import { useAppDispatch, useAppSelector } from '@onekeyhq/kit/src/hooks/redux';
-import {
-  ManageNetworkModalRoutes,
-  ManageNetworkRoutesParams,
-} from '@onekeyhq/kit/src/routes/Modal/ManageNetwork';
 import { updateActiveChainId } from '@onekeyhq/kit/src/store/reducers/chain';
 
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import ManageNetworks from '../../views/ManageNetworks';
 
-type NavigationProps = NativeStackNavigationProp<
-  ManageNetworkRoutesParams,
-  ManageNetworkModalRoutes.ManageNetworkModal
->;
 const ChainSelector: FC = () => {
-  const intl = useIntl();
-  const navigation = useNavigation<NavigationProps>();
   const { size } = useUserDevice();
   const isHorizontal = ['LARGE', 'XLARGE'].includes(size);
 
   const dispatch = useAppDispatch();
   const activeChainId = useAppSelector((s) => s.chain.chainId);
+  const [opened, setOpened] = useState(false);
 
   const handleActiveChainChange = useCallback(
     (chainId) => {
@@ -89,17 +77,16 @@ const ChainSelector: FC = () => {
         triggerProps={{
           width: 160,
         }}
-        headerShown={false}
         dropdownPosition="left"
         value={activeChainId}
         onChange={handleActiveChainChange}
+        title="Networks"
         options={options}
-        footerText={intl.formatMessage({ id: 'action__customize_network' })}
-        footerIcon="PencilOutline"
-        onPressFooter={() =>
-          navigation.navigate(ManageNetworkModalRoutes.ManageNetworkModal)
-        }
+        footerText="Customize"
+        footerIcon="PencilSolid"
+        onPressFooter={() => setOpened(true)}
       />
+      <ManageNetworks opened={opened} onClose={() => setOpened(false)} />
     </Box>
   );
 };

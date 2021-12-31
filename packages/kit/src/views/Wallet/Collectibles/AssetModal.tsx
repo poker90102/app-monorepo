@@ -4,12 +4,15 @@ import {
   Box,
   Center,
   Divider,
+  Flex,
   Icon,
   Image,
   Modal,
   ScrollView,
+  Stack,
   Typography,
   VStack,
+  useUserDevice,
 } from '@onekeyhq/components';
 
 import { SelectedAsset } from './types';
@@ -21,6 +24,8 @@ type CollectionModalProps = {
 };
 
 const AssetModal: FC<CollectionModalProps> = ({ asset, visible, onClose }) => {
+  const isSmallScreen = ['SMALL', 'NORMAL'].includes(useUserDevice().size);
+
   if (!asset) return null;
 
   return (
@@ -28,37 +33,44 @@ const AssetModal: FC<CollectionModalProps> = ({ asset, visible, onClose }) => {
       visible={visible}
       header={asset.name ?? ''}
       onClose={onClose}
-      footer={null}
+      // Kinda hack to hide the footer
+      footer={<Typography.Body1 />}
     >
-      <ScrollView flex={1}>
-        <Center>
-          <Image
-            flex="1"
-            alt={`image of ${
-              typeof asset.name === 'string' ? asset.name : 'nft'
-            }`}
-            height={333}
-            width={333}
-            borderRadius="20px"
-            src={
-              asset.imageUrl ??
-              asset.imagePreviewUrl ??
-              asset.imageOriginalUrl ??
-              undefined
-            }
-            fallbackElement={
-              <Center
-                width="100%"
-                height="333px"
-                bgColor="surface-default"
+      <ScrollView flex={1} maxHeight={isSmallScreen ? undefined : '666px'}>
+        <Stack
+          alignItems="center"
+          justifyContent="center"
+          flexWrap="wrap"
+          space={6}
+        >
+          <Box width="358px">
+            <Box width="100%">
+              <Image
+                maxHeight="420px"
+                minHeight="358px"
+                minWidth={['166px', 'auto']}
                 borderRadius="20px"
-              >
-                <Icon name="QuestionMarkOutline" size={233} />
-              </Center>
-            }
-          />
+                src={
+                  asset.imageUrl ??
+                  asset.imagePreviewUrl ??
+                  asset.imageOriginalUrl ??
+                  undefined
+                }
+                fallbackElement={
+                  <Center
+                    width={420}
+                    height={420}
+                    borderRadius="full"
+                    bg="background-selected"
+                  >
+                    <Icon name="EmptyNftIllus" />
+                  </Center>
+                }
+              />
+            </Box>
+          </Box>
 
-          <VStack mt={6} space={6} w="100%">
+          <VStack space={6} w="100%">
             <VStack>
               <Typography.DisplayLarge>{asset.name}</Typography.DisplayLarge>
               <Typography.Body2 color="text-subdued">
@@ -68,15 +80,13 @@ const AssetModal: FC<CollectionModalProps> = ({ asset, visible, onClose }) => {
             {!!asset.traits?.length && (
               <VStack space={3}>
                 <Typography.Heading>Attributes</Typography.Heading>
-                <Box flexDirection="row" flexWrap="wrap">
-                  {asset.traits.map((trait, index) => (
+                <Flex direction="row" wrap="wrap">
+                  {asset.traits.map((trait) => (
                     <Box
-                      key={`${trait.traitType}-${index}`}
-                      alignSelf="flex-start"
                       px="3"
                       py="2"
+                      width="fit-content"
                       mr="2"
-                      mb="2"
                       bgColor="surface-default"
                       borderRadius="12px"
                     >
@@ -84,86 +94,92 @@ const AssetModal: FC<CollectionModalProps> = ({ asset, visible, onClose }) => {
                       <Typography.Body2>{trait.value}</Typography.Body2>
                     </Box>
                   ))}
-                </Box>
+                </Flex>
               </VStack>
             )}
 
             <VStack>
               <Typography.Heading>Details</Typography.Heading>
-              <Box
-                flexDirection="row"
-                alignItems="flex-start"
-                justifyContent="space-between"
-                py="4"
-              >
-                <Typography.Body1 fontWeight="600" color="text-subdued">
-                  Token ID
-                </Typography.Body1>
-                <Typography.Body1
-                  ml="4"
-                  fontWeight="600"
-                  textAlign="right"
-                  flex="1"
-                  numberOfLines={999}
+              <VStack divider={<Divider />}>
+                <Flex
+                  display="inline-flex"
+                  direction="row"
+                  align="start"
+                  justify="space-between"
+                  py="4"
                 >
-                  {asset.tokenId}
-                </Typography.Body1>
-              </Box>
-              {!!asset.chain && (
-                <>
-                  <Divider />
-                  <Box
-                    display="flex"
-                    flexDirection="row"
-                    alignItems="flex-start"
-                    justifyContent="space-between"
+                  <Typography.Body1
+                    fontWeight="600"
+                    color="text-subdued"
+                    minWidth="fit-content"
+                  >
+                    Token ID
+                  </Typography.Body1>
+                  <Typography.Body1
+                    ml="4"
+                    fontWeight="600"
+                    textAlign="right"
+                    wordBreak="break-all"
+                  >
+                    {asset.tokenId}
+                  </Typography.Body1>
+                </Flex>
+                {!!asset.chain && (
+                  <Flex
+                    display="inline-flex"
+                    direction="row"
+                    align="start"
+                    justify="space-between"
                     py="4"
                   >
-                    <Typography.Body1 fontWeight="600" color="text-subdued">
+                    <Typography.Body1
+                      fontWeight="600"
+                      color="text-subdued"
+                      minWidth="fit-content"
+                    >
                       Blockchain
                     </Typography.Body1>
 
                     <Typography.Body1
                       ml="4"
-                      flex="1"
                       fontWeight="600"
                       textAlign="right"
-                      numberOfLines={999}
+                      wordBreak="break-all"
                     >
                       {asset.chain}
                     </Typography.Body1>
-                  </Box>
-                </>
-              )}
-              {!!asset.contractAddress && (
-                <>
-                  <Divider />
-                  <Box
-                    display="flex"
-                    flexDirection="row"
-                    alignItems="flex-start"
-                    justifyContent="space-between"
+                  </Flex>
+                )}
+                {!!asset.contractAddress && (
+                  <Flex
+                    display="inline-flex"
+                    direction="row"
+                    align="start"
+                    justify="space-between"
                     py="4"
                   >
-                    <Typography.Body1 fontWeight="600" color="text-subdued">
+                    <Typography.Body1
+                      fontWeight="600"
+                      color="text-subdued"
+                      minWidth="fit-content"
+                    >
                       Contract Address
                     </Typography.Body1>
 
                     <Typography.Body1
                       ml="4"
-                      flex="1"
                       fontWeight="600"
                       textAlign="right"
-                      numberOfLines={999}
+                      wordBreak="break-all"
                     >
                       {asset.contractAddress}
                     </Typography.Body1>
-                  </Box>
-                </>
-              )}
+                  </Flex>
+                )}
+              </VStack>
             </VStack>
           </VStack>
-        </Center>
+        </Stack>
       </ScrollView>
     </Modal>
   );

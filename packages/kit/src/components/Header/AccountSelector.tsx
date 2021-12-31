@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Box, useIsVerticalLayout } from '@onekeyhq/components';
+import { Box, useUserDevice } from '@onekeyhq/components';
 
 import AccountSelectorDesktop from './AccountSelectorDesktop';
 import AccountSelectorMobile from './AccountSelectorMobile';
@@ -8,13 +8,13 @@ import AccountSelectorTrigger from './AccountSelectorTrigger';
 
 const AccountSelector = () => {
   const [visible, setVisible] = useState(false);
-  const isVerticalLayout = useIsVerticalLayout();
+  const { size } = useUserDevice();
   const handleToggleVisible = useCallback(() => {
     setVisible((v) => !v);
   }, []);
 
   const child = useMemo(() => {
-    if (isVerticalLayout) {
+    if (['SMALL', 'NORMAL'].includes(size)) {
       return (
         <AccountSelectorMobile
           visible={visible}
@@ -22,13 +22,8 @@ const AccountSelector = () => {
         />
       );
     }
-    return (
-      <AccountSelectorDesktop
-        visible={visible}
-        handleToggleVisible={handleToggleVisible}
-      />
-    );
-  }, [visible, handleToggleVisible, isVerticalLayout]);
+    return <AccountSelectorDesktop visible={visible} />;
+  }, [visible, handleToggleVisible, size]);
 
   return (
     <Box

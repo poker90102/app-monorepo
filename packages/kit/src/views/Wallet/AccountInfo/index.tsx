@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { useNavigation } from '@react-navigation/core';
 import { useIntl } from 'react-intl';
 
 import {
@@ -10,32 +9,15 @@ import {
   Typography,
   useUserDevice,
 } from '@onekeyhq/components';
-import {
-  ReceiveQRCodeModalRoutes,
-  ReceiveQRCodeRoutesParams,
-} from '@onekeyhq/kit/src/routes/Modal/ReceiveToken';
-import {
-  SendTokenModalRoutes,
-  SendTokenRoutesParams,
-} from '@onekeyhq/kit/src/routes/Modal/SendToken';
 
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-type NavigationProps = NativeStackNavigationProp<
-  SendTokenRoutesParams,
-  SendTokenModalRoutes.SendTokenModal
-> &
-  NativeStackNavigationProp<
-    ReceiveQRCodeRoutesParams,
-    ReceiveQRCodeModalRoutes.ReceiveQRCodeModal
-  >;
+import ReceiveQRcode from '../../Transaction/receiveQRcode';
+import Transaction from '../../Transaction/transaction';
 
 const AccountInfo = () => {
-  const isSmallView = ['SMALL', 'NORMAL'].includes(useUserDevice().size);
+  const { size: accountInfoSize } = useUserDevice();
   const intl = useIntl();
-  const navigation = useNavigation<NavigationProps>();
 
-  const renderAccountAmountInfo = useCallback(
+  const AccountAmountInfo = useCallback(
     (isCenter: boolean) => (
       <Box alignItems={isCenter ? 'center' : 'flex-start'} mt={8}>
         <Typography.Subheading color="text-subdued">
@@ -51,41 +33,43 @@ const AccountInfo = () => {
     [intl],
   );
 
-  const accountOption = useMemo(
+  const AccountOption = useCallback(
     () => (
       <Box flexDirection="row" mt={8} justifyContent="center">
-        <Button
-          leftIcon={<Icon size={20} name="ArrowSmUpSolid" />}
-          minW="126px"
-          type="basic"
-          onPress={() => {
-            navigation.navigate(SendTokenModalRoutes.SendTokenModal);
-          }}
-        >
-          {intl.formatMessage({ id: 'action__send' })}
-        </Button>
-        <Button
-          ml={4}
-          leftIcon={<Icon name="ArrowSmDownSolid" />}
-          minW="126px"
-          type="basic"
-          onPress={() => {
-            navigation.navigate(ReceiveQRCodeModalRoutes.ReceiveQRCodeModal);
-          }}
-        >
-          {intl.formatMessage({ id: 'action__receive' })}
-        </Button>
+        <Transaction
+          trigger={
+            <Button
+              leftIcon={<Icon name="ArrowSmUpSolid" />}
+              minW="126px"
+              type="basic"
+            >
+              {intl.formatMessage({ id: 'action__send' })}
+            </Button>
+          }
+        />
+        <ReceiveQRcode
+          trigger={
+            <Button
+              ml={4}
+              leftIcon={<Icon name="ArrowSmDownSolid" />}
+              minW="126px"
+              type="basic"
+            >
+              {intl.formatMessage({ id: 'action__receive' })}
+            </Button>
+          }
+        />
       </Box>
     ),
-    [intl, navigation],
+    [intl],
   );
 
   return useMemo(() => {
-    if (isSmallView) {
+    if (['SMALL', 'NORMAL'].includes(accountInfoSize)) {
       return (
-        <Box w="100%" flexDirection="column" bgColor="background-default">
-          {renderAccountAmountInfo(true)}
-          {accountOption}
+        <Box w="100%" flexDirection="column">
+          {AccountAmountInfo(true)}
+          {AccountOption()}
         </Box>
       );
     }
@@ -96,13 +80,12 @@ const AccountInfo = () => {
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
-        bgColor="background-default"
       >
-        <Box>{renderAccountAmountInfo(false)}</Box>
-        <Box>{accountOption}</Box>
+        <Box>{AccountAmountInfo(false)}</Box>
+        <Box>{AccountOption()}</Box>
       </Box>
     );
-  }, [isSmallView, renderAccountAmountInfo, accountOption]);
+  }, [AccountAmountInfo, AccountOption, accountInfoSize]);
 };
 
 export default AccountInfo;

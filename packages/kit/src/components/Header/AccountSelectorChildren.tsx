@@ -1,6 +1,4 @@
-import React, { FC, useCallback, useState } from 'react';
-
-import { useNavigation } from '@react-navigation/core';
+import React, { FC, useState } from 'react';
 
 import {
   Account,
@@ -15,19 +13,8 @@ import {
   VStack,
   useUserDevice,
 } from '@onekeyhq/components';
-import {
-  CreateAccountModalRoutes,
-  CreateAccountRoutesParams,
-  ModalRoutes,
-} from '@onekeyhq/kit/src/routes';
 import ImportedAccount from '@onekeyhq/kit/src/views/Account/ImportedAccount';
-
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-type NavigationProps = NativeStackNavigationProp<
-  CreateAccountRoutesParams,
-  CreateAccountModalRoutes.CreateAccountForm
->;
+import WatchedAccount from '@onekeyhq/kit/src/views/Account/WatchedAccount';
 
 // const WATCHED_ACCOUNTS = [];
 // const IMPORTED_ACCOUNTS = [];
@@ -41,30 +28,17 @@ const NORMAL_ACCOUNTS = [
 
 type AccountType = 'normal' | 'hd' | 'imported' | 'watched';
 
-function renderSideAction(
-  type: AccountType,
-  size: string,
-  onChange: (v: string) => void,
-) {
+function renderSideAction(type: AccountType, size: string) {
   if (type === 'normal') {
     return (
       <Select
         dropdownPosition="right"
-        onChange={onChange}
         options={[
           {
             label: 'Rename',
             value: 'rename',
             iconProps: {
               name: 'TagOutline',
-              size: 24,
-            },
-          },
-          {
-            label: 'Add Account',
-            value: 'addAccount',
-            iconProps: {
-              name: 'PlusCircleOutline',
               size: 24,
             },
           },
@@ -113,9 +87,13 @@ function renderSideAction(
 
   if (type === 'watched') {
     return (
-      <Pressable px="2" justifyContent="center">
-        <Icon name="PlusOutline" />
-      </Pressable>
+      <WatchedAccount
+        trigger={
+          <Pressable px="2" justifyContent="center">
+            <Icon name="PlusOutline" />
+          </Pressable>
+        }
+      />
     );
   }
 
@@ -132,32 +110,10 @@ function renderSideAction(
   }
 }
 
-type ChildrenProps = {
-  handleToggleVisible: () => void;
-};
-
-const AccountSelectorChildren: FC<ChildrenProps> = ({
-  handleToggleVisible,
-}) => {
+const AccountSelectorChildren: FC = () => {
   const { size } = useUserDevice();
-  const navigation = useNavigation<NavigationProps>();
-
   const [activeAccountType, setActiveAccountType] =
     useState<AccountType>('normal');
-
-  const handleChange = useCallback(
-    (type) => {
-      if (type === 'addAccount') {
-        // setAddAccountVisible(true);
-        handleToggleVisible();
-        setTimeout(() => {
-          navigation.navigate(ModalRoutes.CreateAccountForm);
-        }, 200);
-      }
-    },
-    [navigation, handleToggleVisible],
-  );
-
   return (
     <>
       <Box p="2">
@@ -266,12 +222,8 @@ const AccountSelectorChildren: FC<ChildrenProps> = ({
             <Typography.Body1>Wallet #2</Typography.Body1>
             <Typography.Caption>Network: Ethereum</Typography.Caption>
           </Box>
-          {renderSideAction(activeAccountType, size, handleChange)}
+          {renderSideAction(activeAccountType, size)}
         </Box>
-        {/* <CreateAccount
-          visible={addAccountVisible}
-          onClose={() => setAddAccountVisible(false)}
-        /> */}
         <FlatList
           data={NORMAL_ACCOUNTS}
           keyExtractor={(_, index) => index.toString()}

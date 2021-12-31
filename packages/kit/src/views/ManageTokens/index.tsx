@@ -8,6 +8,7 @@ import {
   Divider,
   Empty,
   FlatList,
+  Flex,
   IconButton,
   Modal,
   Searchbar,
@@ -73,9 +74,9 @@ const TokensModal: FC<TokensModalProps> = ({ trigger }) => {
   }, [keyword]);
 
   const renderItem = ({ item }: { item: IToken }) => (
-    <Box
+    <Flex
       display="flex"
-      flexDirection="row"
+      direction="row"
       justifyContent="space-between"
       p="4"
       alignItems="center"
@@ -92,12 +93,12 @@ const TokensModal: FC<TokensModalProps> = ({ trigger }) => {
         type="plain"
         onPress={() => setShowAddModal(true)}
       />
-    </Box>
+    </Flex>
   );
   const renderOwnedItem = ({ item }: { item: IToken }) => (
-    <Box
+    <Flex
       display="flex"
-      flexDirection="row"
+      direction="row"
       justifyContent="space-between"
       p="4"
       alignItems="center"
@@ -116,7 +117,7 @@ const TokensModal: FC<TokensModalProps> = ({ trigger }) => {
           setToken(item);
         }}
       />
-    </Box>
+    </Flex>
   );
 
   let contentView: ReactElement | undefined;
@@ -191,52 +192,7 @@ const TokensModal: FC<TokensModalProps> = ({ trigger }) => {
             showsVerticalScrollIndicator={false}
           />
         </Box>
-      </Box>
-    );
-  }
-
-  return (
-    <>
-      <Modal
-        trigger={trigger}
-        header={intl.formatMessage({
-          id: 'title__manage_tokens',
-          defaultMessage: 'Manage Tokens',
-        })}
-        hideSecondaryAction
-        onPrimaryActionPress={() => {
-          setShowAddCustomModal(true);
-        }}
-        primaryActionTranslationId="action__add_custom_tokens"
-        primaryActionProps={{ type: 'basic', leftIconName: 'PlusOutline' }}
-      >
-        <>
-          <Box>
-            <Searchbar
-              w="full"
-              placeholder={intl.formatMessage({
-                id: 'form__search_tokens',
-                defaultMessage: 'Search Tokens',
-              })}
-              mb="6"
-              value={keyword}
-              onClear={() => setKeyword('')}
-              onChangeText={(text) => setKeyword(text.trim())}
-            />
-            {contentView}
-          </Box>
-          <AddTokenModal
-            visible={showAddModal}
-            onClose={() => setShowAddModal(false)}
-          />
-          <AddCustomToken
-            visible={showAddCustomModal}
-            defaultValues={{ address: '', symbol: '', decimal: '' }}
-            onSubmit={() => {
-              setShowAddCustomModal(false);
-            }}
-            onClose={() => setShowAddCustomModal(false)}
-          />
+        <Box>
           <Dialog
             visible={!!token}
             onClose={() => setToken(undefined)}
@@ -260,8 +216,53 @@ const TokensModal: FC<TokensModalProps> = ({ trigger }) => {
               ),
             }}
           />
-        </>
+        </Box>
+      </Box>
+    );
+  }
+
+  return (
+    <>
+      <Modal
+        trigger={trigger}
+        header={intl.formatMessage({
+          id: 'title__manage_tokens',
+          defaultMessage: 'Manage Tokens',
+        })}
+        hideSecondaryAction
+        onPrimaryActionPress={() => {
+          setShowAddCustomModal(true);
+        }}
+        primaryActionTranslationId="action__add_custom_tokens"
+        primaryActionProps={{ type: 'basic', leftIconName: 'PlusOutline' }}
+      >
+        <Flex>
+          <Searchbar
+            w="full"
+            placeholder={intl.formatMessage({
+              id: 'form__search_tokens',
+              defaultMessage: 'Search Tokens',
+            })}
+            mb="6"
+            value={keyword}
+            onClear={() => setKeyword('')}
+            onChangeText={(text) => setKeyword(text.trim())}
+          />
+          {contentView}
+        </Flex>
       </Modal>
+      <AddTokenModal
+        visible={showAddModal}
+        onClose={() => setShowAddModal(false)}
+      />
+      <AddCustomToken
+        visible={showAddCustomModal}
+        defaultValues={{ address: '', symbol: '', decimal: '' }}
+        onSubmit={() => {
+          setShowAddCustomModal(false);
+        }}
+        onClose={() => setShowAddCustomModal(false)}
+      />
     </>
   );
 };

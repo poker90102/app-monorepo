@@ -9,7 +9,6 @@ import {
   Token,
   Typography,
   VStack,
-  useUserDevice,
 } from '@onekeyhq/components';
 
 import { Collectible, SelectedAsset } from './types';
@@ -27,8 +26,6 @@ const CollectionModal: FC<CollectionModalProps> = ({
   onClose,
   onSelectAsset,
 }) => {
-  const isSmallScreen = ['SMALL', 'NORMAL'].includes(useUserDevice().size);
-
   if (!collectible) return null;
 
   return (
@@ -36,9 +33,10 @@ const CollectionModal: FC<CollectionModalProps> = ({
       visible={visible}
       header={collectible.collection.name ?? ''}
       onClose={onClose}
-      footer={null}
+      // Kinda hack to hide the footer
+      footer={<Typography.Body1 />}
     >
-      <ScrollView flex={1} mx={-2}>
+      <ScrollView flex={1}>
         <Center>
           <Token
             size="56px"
@@ -58,26 +56,26 @@ const CollectionModal: FC<CollectionModalProps> = ({
               alignItems="center"
               justifyContent={['space-between', 'initial']}
             >
-              {collectible.assets.map((asset, index) => {
-                const marginRight = isSmallScreen && !(index % 2 === 0) ? 0 : 4;
-
-                return (
-                  <NftCard
-                    key={asset.id ?? asset.name}
-                    image={asset.imageUrl}
-                    title={asset.name}
-                    mr={marginRight}
-                    mb={4}
-                    onPress={() =>
-                      onSelectAsset({
-                        ...asset,
-                        chain: collectible.chain,
-                        contractAddress: collectible.contract.address,
-                      })
-                    }
-                  />
-                );
-              })}
+              {collectible.assets.map((asset) => (
+                <NftCard
+                  key={asset.id ?? asset.name}
+                  image={asset.imageUrl}
+                  title={asset.name}
+                  w={['45%', 'auto']}
+                  minW={['auto', '177px']}
+                  maxW={['auto', '177px']}
+                  maxH="222px"
+                  mb={4}
+                  mr={[0, 4]}
+                  onPress={() =>
+                    onSelectAsset({
+                      ...asset,
+                      chain: collectible.chain,
+                      contractAddress: collectible.contract.address,
+                    })
+                  }
+                />
+              ))}
             </HStack>
           </VStack>
         </Center>

@@ -8,23 +8,19 @@ import {
   FlatList,
   Pressable,
   Typography,
+  useIsRootRoute,
 } from '@onekeyhq/components';
-import { StackRoutes, StackRoutesParams } from '@onekeyhq/kit/src/routes/Stack';
 
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-type StackRoutesType = typeof StackRoutes;
-
-type NavigationProps = NativeStackNavigationProp<
-  StackRoutesParams,
-  StackRoutesType[keyof StackRoutesType]
->;
+// eslint-disable-next-line import/no-cycle
+import { stackRoutes } from '../../routes';
 
 const Index = () => {
-  const navigation = useNavigation<NavigationProps>();
+  const navigation = useNavigation();
+  const { setIsRootRoute } = useIsRootRoute();
 
-  const componentsRoute = Object.values(StackRoutes)
-    .filter((item) => item.startsWith('component'))
+  const componentsRoute = stackRoutes
+    .filter((item) => item.name.startsWith('Components'))
+    .map((item) => item.name)
     .sort();
 
   return (
@@ -34,7 +30,11 @@ const Index = () => {
       renderItem={({ item, index }) => (
         <Pressable
           onPress={() => {
-            navigation.navigate(item);
+            // TODO hack here, define custom useNavigation?
+            setIsRootRoute(false);
+            setTimeout(() => {
+              navigation.navigate(item as any);
+            }, 0);
           }}
         >
           <Box
@@ -47,7 +47,7 @@ const Index = () => {
           >
             <Center display="flex" flexDirection="row">
               <Typography.DisplayLarge>
-                {item.replace('component/', '')}
+                {item.replace('Components/', '')}
               </Typography.DisplayLarge>
             </Center>
           </Box>

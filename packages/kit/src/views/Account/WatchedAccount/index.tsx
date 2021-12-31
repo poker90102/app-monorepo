@@ -1,48 +1,42 @@
-import React, { FC } from 'react';
+import React, { FC, ReactElement } from 'react';
 
-import { useNavigation } from '@react-navigation/core';
 import { useIntl } from 'react-intl';
 
 import { Box, Form, Modal, useForm } from '@onekeyhq/components';
-import {
-  CreateAccountModalRoutes,
-  CreateAccountRoutesParams,
-  ModalRoutes,
-} from '@onekeyhq/kit/src/routes';
 
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-type NavigationProps = NativeStackNavigationProp<
-  CreateAccountRoutesParams,
-  CreateAccountModalRoutes.RecoveryAccountForm
->;
 type PrivateKeyFormValues = {
   network: string;
   name: string;
   address: string;
 };
 
-const WatchedAccount: FC = () => {
+type WatchedAccountProps = {
+  trigger: ReactElement<any>;
+};
+
+const WatchedAccount: FC<WatchedAccountProps> = ({ trigger }) => {
   const intl = useIntl();
-  const { control } = useForm<PrivateKeyFormValues>();
-  const navigation = useNavigation<NavigationProps>();
+  const { control, handleSubmit } = useForm<PrivateKeyFormValues>();
+
   return (
     <Modal
       header={intl.formatMessage({ id: 'wallet__watched_accounts' })}
+      trigger={trigger}
       primaryActionTranslationId="action__import"
-      onPrimaryActionPress={() =>
-        navigation.navigate(ModalRoutes.RecoveryAccountForm)
+      onPrimaryActionPress={({ onClose }) =>
+        handleSubmit((data) => {
+          console.log(data);
+          onClose?.();
+        })
       }
       hideSecondaryAction
     >
       <Box
         w="full"
-        zIndex={999}
         display="flex"
         flex="1"
         flexDirection="row"
         justifyContent="center"
-        bg="background-default"
       >
         <Form w="full">
           <Form.Item

@@ -3,6 +3,7 @@ import React, { FC, useState } from 'react';
 import {
   Box,
   Divider,
+  Flex,
   Icon,
   Pressable,
   ScrollView,
@@ -30,33 +31,31 @@ export const EditableView: FC = () => {
     item: ChainInfo;
     drag: () => void;
   }) => (
-    <Box
-      display="flex"
-      flexDirection="row"
+    <Flex
+      direction="row"
       justifyContent="space-between"
       alignItems="center"
       p="4"
     >
-      <Box display="flex" flexDirection="row" alignItems="center">
+      <Flex direction="row" alignItems="center">
         <Pressable onPressIn={() => drag()} mr="2">
           <Icon name="MenuOutline" size={16} />
         </Pressable>
         <Token chain={item.chain} name={item.name} size={8} />
-      </Box>
+      </Flex>
       <Switch labelType="false" />
-    </Box>
+    </Flex>
   );
   return (
     <ScrollView>
       <Box>
-        <Box
-          display="flex"
-          flexDirection="row"
+        <Flex
+          direction="row"
           justifyContent="space-between"
           alignItems="center"
         >
           <Typography.Heading>EVM</Typography.Heading>
-        </Box>
+        </Flex>
         <Box bg="surface-default" borderRadius="12" mt="3" mb="3">
           <SortableList.Container
             keyExtractor={({ chain }) => chain}

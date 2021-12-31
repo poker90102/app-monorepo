@@ -1,14 +1,19 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box } from '@onekeyhq/components';
-
-import { ScrollRoute } from '../type';
+import {
+  HStack,
+  ScrollView,
+  SegmentedControl,
+  Typography,
+  VStack,
+  useUserDevice,
+} from '@onekeyhq/components';
 
 import AssetModal from './AssetModal';
 import CollectibleGallery from './CollectibleGallery';
 import CollectionModal from './CollectionModal';
 import { ASSETS } from './data';
-import { Collectible, SelectedAsset } from './types';
+import { Collectible, CollectibleView, SelectedAsset } from './types';
 
 const useDisclose = (initState?: boolean) => {
   const [isOpen, setIsOpen] = useState(initState || false);
@@ -29,8 +34,8 @@ const useDisclose = (initState?: boolean) => {
   };
 };
 
-const Collectibles = ({ route }: { route: ScrollRoute }) => {
-  const tabPageIndex = route.index;
+const Collectibles = () => {
+  const [view, setView] = useState(CollectibleView.Flat);
   const [collectibles] = useState<Collectible[]>(ASSETS);
   const [selectedAsset, setSelectedAsset] = useState<SelectedAsset | null>(
     null,
@@ -39,6 +44,14 @@ const Collectibles = ({ route }: { route: ScrollRoute }) => {
     useState<Collectible | null>(null);
   const assetModalConfig = useDisclose();
   const collectibleModalConfig = useDisclose();
+
+  // Set it to grid view when not in mobile
+  const isSmallScreen = ['SMALL', 'NORMAL'].includes(useUserDevice().size);
+  useEffect(() => {
+    if (!isSmallScreen) {
+      return setView(CollectibleView.Grid);
+    }
+  }, [isSmallScreen]);
 
   const handleSelectAsset = useCallback(
     (asset: SelectedAsset) => {
@@ -70,13 +83,7 @@ const Collectibles = ({ route }: { route: ScrollRoute }) => {
   }, [collectibleModalConfig]);
 
   return (
-    <Box flex={1} p={4} pb={0}>
-      <CollectibleGallery
-        index={tabPageIndex}
-        collectibles={collectibles}
-        onSelectCollectible={handleSelectCollectible}
-        onSelectAsset={handleSelectAsset}
-      />
+    <ScrollView bg="background-default">
       <CollectionModal
         collectible={selectedCollectible}
         visible={collectibleModalConfig.isOpen}
@@ -88,7 +95,35 @@ const Collectibles = ({ route }: { route: ScrollRoute }) => {
         visible={assetModalConfig.isOpen}
         onClose={handleCloseAssetModal}
       />
-    </Box>
+      <VStack space={3} w="100%" p={4}>
+        {isSmallScreen && !!collectibles?.length && (
+          <HStack alignItems="center" justifyContent="space-between">
+            <Typography.Heading>Collectibles</Typography.Heading>
+            <SegmentedControl
+              options={[
+                {
+                  iconName: 'ViewListSolid',
+                  value: CollectibleView.Flat,
+                },
+                {
+                  iconName: 'ViewGridSolid',
+                  value: CollectibleView.Grid,
+                },
+              ]}
+              defaultValue={view}
+              onChange={(newView) => setView(newView as CollectibleView)}
+            />
+          </HStack>
+        )}
+
+        <CollectibleGallery
+          collectibles={collectibles}
+          view={view}
+          onSelectCollectible={handleSelectCollectible}
+          onSelectAsset={handleSelectAsset}
+        />
+      </VStack>
+    </ScrollView>
   );
 };
 

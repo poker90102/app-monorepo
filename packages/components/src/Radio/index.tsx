@@ -52,11 +52,11 @@ const Radio: FC<RadioProps> = ({
   }
 
   const { ...radioProps } = props as IRadioProps;
-  const { ...boxProps } = props as IBoxProps;
+  const { ...boxPorps } = props as IBoxProps;
 
   return (
     <Box
-      {...boxProps}
+      {...boxPorps}
       display="flex"
       flexDirection="row"
       alignItems="flex-start"
@@ -72,11 +72,10 @@ const Radio: FC<RadioProps> = ({
           borderColor="border-default"
           // @ts-ignore
           _hover={{
-            borderColor: isChecked
-              ? 'action-primary-default'
-              : 'border-default',
+            bg: 'action-primary-hovered',
+            borderColor: 'border-hovered',
             _interactionBox: {
-              bg: 'surface-hovered',
+              bg: 'action-primary-hovered',
             },
           }}
           _icon={{
@@ -85,16 +84,6 @@ const Radio: FC<RadioProps> = ({
           _checked={{
             borderColor: 'action-primary-default',
             bg: 'action-primary-default',
-          }}
-          _focus={{
-            _interactionBox: {
-              bg: 'action-primary-focus',
-            },
-          }}
-          _focusVisible={{
-            _interactionBox: {
-              bg: 'action-primary-focus',
-            },
           }}
           _disabled={{
             opacity: 1,
@@ -108,7 +97,7 @@ const Radio: FC<RadioProps> = ({
           _pressed={{
             bg: 'action-primary-pressed',
             _interactionBox: {
-              bg: 'action-primary-focus',
+              bg: 'action-secondary-hovered',
             },
           }}
         />
@@ -116,8 +105,8 @@ const Radio: FC<RadioProps> = ({
       {!!(description || title) && (
         <Pressable display="flex" flex={1}>
           <Typography.Body2
-            fontWeight="bold"
             selectable={false}
+            fontWeight="bold"
             color={titleColor}
             h="5"
           >

@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import React, { FC, isValidElement } from 'react';
 
-import { useNavigation, useNavigationState } from '@react-navigation/core';
 import { useIntl } from 'react-intl';
+import Modal from 'react-native-modal';
 
 import Box from '../../Box';
 import Button from '../../Button';
@@ -14,6 +13,7 @@ import Typography from '../../Typography';
 import type { ModalProps } from '..';
 
 const DesktopModal: FC<ModalProps> = ({
+  visible,
   children,
   onClose,
   closeable,
@@ -29,27 +29,20 @@ const DesktopModal: FC<ModalProps> = ({
   header,
 }) => {
   const intl = useIntl();
-  const navigation = useNavigation();
-  const index = useNavigationState((state) => state.index);
-
   return (
-    <Box
-      position="absolute"
-      top="0"
-      left="0"
-      right="0"
-      bottom="0"
-      justifyContent="center"
-      alignItems="center"
-      zIndex={99}
+    <Modal
+      useNativeDriver
+      hideModalContentWhileAnimating
+      isVisible={!!visible}
+      animationIn="fadeIn"
+      animationOut="fadeOut"
+      onBackdropPress={closeable ? onClose : undefined}
     >
       <Box
         width="720px"
         alignSelf="center"
         borderRadius="24px"
         bg="surface-subdued"
-        height="548px"
-        zIndex={999}
       >
         <Box
           py="5"
@@ -59,34 +52,17 @@ const DesktopModal: FC<ModalProps> = ({
           justifyContent="space-between"
           alignItems="center"
         >
-          {index ? (
-            <Pressable
-              onPress={() => {
-                if (navigation.canGoBack()) {
-                  navigation.goBack();
-                }
-              }}
-            >
-              <Icon name="ChevronLeftOutline" size={24} />
-            </Pressable>
-          ) : null}
-          <Typography.Heading flex="1" textAlign="center">
-            {header}
-          </Typography.Heading>
+          <Typography.Heading flex="1">{header}</Typography.Heading>
           {!!closeable && (
-            <Pressable
-              onPress={() => {
-                // @ts-expect-error
-                navigation?.popToTop?.();
-                navigation.goBack();
-              }}
-            >
+            <Pressable onPress={onClose}>
               <Icon name="CloseOutline" size={20} />
             </Pressable>
           )}
         </Box>
         <Divider />
-        {children}
+        <Box p="6" minHeight="70px">
+          {children}
+        </Box>
         {isValidElement(footer) || footer === null ? (
           footer
         ) : (
@@ -132,7 +108,7 @@ const DesktopModal: FC<ModalProps> = ({
           </Box>
         )}
       </Box>
-    </Box>
+    </Modal>
   );
 };
 
