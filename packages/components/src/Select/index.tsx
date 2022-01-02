@@ -13,7 +13,7 @@ import Box from '../Box';
 import Icon, { ICON_NAMES } from '../Icon';
 import { ChevronDown } from '../Icon/react/solid';
 import Pressable from '../Pressable';
-import { useUserDevice } from '../Provider/hooks';
+import { useIsVerticalLayout, useUserDevice } from '../Provider/hooks';
 import Token from '../Token';
 import Typography from '../Typography';
 
@@ -25,6 +25,9 @@ export type SelectItem<T = string> = {
   value: T;
   tokenProps?: ComponentProps<typeof Token>;
   iconProps?: ComponentProps<typeof Icon>;
+  OutlineIcon?: string;
+  SolidIcon?: string;
+  destructive?: boolean;
 };
 
 export type SelectGroupItem<T = string> = {
@@ -53,6 +56,9 @@ export type SelectProps<T = string> = {
   footerText?: string;
   footerIcon?: ICON_NAMES;
   onPressFooter?: () => void;
+  onModalHide?: () => void;
+  isTriggerPlain?: boolean;
+  asAction?: boolean;
 };
 
 export type ChildProps<T> = Pick<
@@ -67,23 +73,21 @@ export type ChildProps<T> = Pick<
   | 'onPressFooter'
   | 'renderItem'
   | 'headerShown'
+  | 'onModalHide'
+  | 'isTriggerPlain'
+  | 'asAction'
+  | 'dropdownPosition'
 > & {
   toggleVisible: () => void;
   visible: boolean;
   activeOption: SelectItem<T>;
 };
 
-function getTriggerAlignSelf(
-  dropdownPosition: SelectProps['dropdownPosition'],
-) {
-  if (dropdownPosition === 'left') return 'flex-end';
-  if (dropdownPosition === 'right') return 'flex-start';
-  return 'center';
-}
-
 const defaultProps = {
   headerShown: true,
   dropdownPosition: 'center',
+  isTriggerPlain: false,
+  asAction: false,
 } as const;
 
 function Select<T = string>({
@@ -102,10 +106,13 @@ function Select<T = string>({
   footerIcon,
   onPressFooter,
   headerShown,
+  isTriggerPlain,
+  asAction,
   dropdownPosition,
 }: SelectProps<T>) {
   const [visible, setVisible] = useState(false);
   const { size } = useUserDevice();
+  const isSmallScreen = useIsVerticalLayout();
   const toggleVisible = useCallback(() => {
     setVisible((v) => !v);
   }, []);
@@ -157,6 +164,8 @@ function Select<T = string>({
       renderItem,
       headerShown,
       onChange: handleChange,
+      asAction,
+      dropdownPosition,
     };
 
     if (['SMALL', 'NORMAL'].includes(size)) {
@@ -178,29 +187,40 @@ function Select<T = string>({
     activeOption,
     renderItem,
     headerShown,
+    asAction,
+    dropdownPosition,
   ]);
 
   return (
     <Box width="100%" position="relative" {...containerProps}>
       <Pressable
-        display="flex"
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-        borderRadius="12px"
-        borderWidth={1}
-        borderColor="border-default"
-        // bg={visible ? 'surface-selected' : 'transparent'}
-        py="2"
-        pl="3"
-        pr="2.5"
         width="100%"
         onPress={toggleVisible}
-        alignSelf={getTriggerAlignSelf(dropdownPosition)}
+        borderWidth={isTriggerPlain && renderTrigger ? '' : '1'}
+        borderColor={isTriggerPlain && renderTrigger ? '' : 'border-default'}
+        bg={isTriggerPlain && renderTrigger ? '' : 'action-secondary-default'}
+        borderRadius={renderTrigger ? '' : 'xl'}
+        _hover={
+          // eslint-disable-next-line no-nested-ternary
+          renderTrigger
+            ? {}
+            : isTriggerPlain
+            ? { bg: 'surface-hovered' }
+            : { borderColor: 'border-hovered' }
+        }
         {...triggerProps}
       >
         {renderTrigger?.(activeOption) ?? (
-          <>
+          <Box
+            display="flex"
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            // bg={visible ? 'surface-selected' : 'transparent'}
+            py="2"
+            pl="3"
+            pr="2.5"
+          >
             {!!activeOption.tokenProps && (
               <Box mr="3">
                 <Token size={6} {...activeOption.tokenProps} />
@@ -211,11 +231,17 @@ function Select<T = string>({
                 <Icon size={6} {...activeOption.iconProps} />
               </Box>
             )}
-            <Typography.Body2 numberOfLines={1} flex="1" mr="1">
-              {activeOption.label ?? '-'}
-            </Typography.Body2>
+            {isSmallScreen ? (
+              <Typography.Body1 numberOfLines={1} flex="1" mr="1">
+                {activeOption.label ?? '-'}
+              </Typography.Body1>
+            ) : (
+              <Typography.Body2 numberOfLines={1} flex="1" mr="1">
+                {activeOption.label ?? '-'}
+              </Typography.Body2>
+            )}
             <NBIcon as={ChevronDown} size={5} color="icon-default" />
-          </>
+          </Box>
         )}
       </Pressable>
       {container}
