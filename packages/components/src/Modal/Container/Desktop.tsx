@@ -6,7 +6,9 @@ import { useIntl } from 'react-intl';
 
 import Box from '../../Box';
 import Button from '../../Button';
-import IconButton from '../../IconButton';
+import Divider from '../../Divider';
+import Icon from '../../Icon';
+import Pressable from '../../Pressable';
 import Typography from '../../Typography';
 
 import type { ModalProps } from '..';
@@ -25,31 +27,10 @@ const DesktopModal: FC<ModalProps> = ({
   onPrimaryActionPress,
   onSecondaryActionPress,
   header,
-  size,
-  headerDescription,
 }) => {
   const intl = useIntl();
   const navigation = useNavigation();
   const index = useNavigationState((state) => state.index);
-
-  function modalSizing(modalSize: string | undefined) {
-    switch (modalSize) {
-      case 'xs':
-        return '400px';
-      case 'sm':
-        return '480px';
-      case 'md':
-        return '560px';
-      case 'lg':
-        return '640px';
-      case 'xl':
-        return '720px';
-      case '2xl':
-        return '800px';
-      default:
-        return '';
-    }
-  }
 
   return (
     <Box
@@ -63,62 +44,54 @@ const DesktopModal: FC<ModalProps> = ({
       zIndex={99}
     >
       <Box
-        width={modalSizing(size)}
+        width="720px"
         alignSelf="center"
         borderRadius="24px"
         bg="surface-subdued"
+        height="548px"
         zIndex={999}
       >
         <Box
-          p={4}
-          pl={index ? 4 : 6}
+          py="5"
+          px="6"
           display="flex"
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center"
-          borderBottomColor="border-subdued"
-          borderBottomWidth={header ? 1 : undefined}
         >
           {index ? (
-            <IconButton
-              size="base"
-              name="ArrowLeftSolid"
-              type="plain"
-              circle
+            <Pressable
               onPress={() => {
                 if (navigation.canGoBack()) {
                   navigation.goBack();
                 }
               }}
-            />
+            >
+              <Icon name="ChevronLeftOutline" size={24} />
+            </Pressable>
           ) : null}
-          <Box flex="1" ml={index ? 4 : undefined}>
-            <Typography.Heading>{header}</Typography.Heading>
-            {!!headerDescription && (
-              <Typography.Caption color="text-subdued">
-                {headerDescription}
-              </Typography.Caption>
-            )}
-          </Box>
+          <Typography.Heading flex="1" textAlign="center">
+            {header}
+          </Typography.Heading>
           {!!closeable && (
-            <IconButton
-              size="base"
-              name="CloseSolid"
-              type="plain"
-              circle
+            <Pressable
               onPress={() => {
                 // @ts-expect-error
                 navigation?.popToTop?.();
                 navigation.goBack();
               }}
-            />
+            >
+              <Icon name="CloseOutline" size={20} />
+            </Pressable>
           )}
         </Box>
+        <Divider />
         {children}
         {isValidElement(footer) || footer === null ? (
           footer
         ) : (
-          <Box borderTopWidth={1} borderTopColor="border-subdued">
+          <Box height="70px">
+            <Divider />
             <Box
               py="4"
               px="6"

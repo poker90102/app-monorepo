@@ -6,7 +6,9 @@ import { useIntl } from 'react-intl';
 
 import Box from '../../Box';
 import Button from '../../Button';
-import IconButton from '../../IconButton';
+import Divider from '../../Divider';
+import Icon from '../../Icon';
+import Pressable from '../../Pressable';
 import { useSafeAreaInsets } from '../../Provider/hooks';
 import Typography from '../../Typography';
 
@@ -25,7 +27,6 @@ const MobileModal: FC<ModalProps> = ({
   onPrimaryActionPress,
   onSecondaryActionPress,
   header,
-  headerDescription,
 }) => {
   const intl = useIntl();
   const navigation = useNavigation();
@@ -33,58 +34,49 @@ const MobileModal: FC<ModalProps> = ({
   const index = useNavigationState((state) => state.index);
 
   return (
-    <Box flex="1" bg="surface-subdued">
+    <Box flex="1" bg="background-default">
       <Box
-        py={1}
-        pr={2}
-        pl={index ? 2 : '56px'}
+        px="6"
+        p="5"
         display="flex"
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
-        borderBottomColor="border-subdued"
-        borderBottomWidth={header ? 1 : undefined}
       >
         {index ? (
-          <IconButton
-            size="xl"
-            name="ChevronLeftOutline"
-            type="plain"
-            circle
+          <Pressable
             onPress={() => {
               if (navigation.canGoBack()) {
                 navigation.goBack();
               }
             }}
-          />
+          >
+            <Icon name="ChevronLeftOutline" size={24} />
+          </Pressable>
         ) : null}
-        <Box flex="1">
-          <Typography.Heading textAlign="center">{header}</Typography.Heading>
-          {!!headerDescription && (
-            <Typography.Caption textAlign="center" color="text-subdued">
-              {headerDescription}
-            </Typography.Caption>
-          )}
-        </Box>
-        <IconButton
-          size="xl"
-          name="CloseOutline"
-          type="plain"
-          circle
+        <Typography.Heading flex="1" textAlign="center">
+          {header}
+        </Typography.Heading>
+        <Pressable
           onPress={() => {
             // @ts-expect-error
             navigation?.popToTop?.();
             navigation.goBack();
           }}
-        />
+        >
+          <Icon name="CloseOutline" size={24} />
+        </Pressable>
       </Box>
+      <Divider />
       {children}
       {isValidElement(footer) || footer === null ? (
         footer
       ) : (
-        <Box pb={bottom} borderTopWidth={1} borderTopColor="border-subdued">
+        <Box height={70 + bottom}>
+          <Divider />
           <Box
-            p={4}
+            py="4"
+            px="6"
             display="flex"
             flexDirection="row-reverse"
             justifyContent="space-between"
@@ -93,9 +85,8 @@ const MobileModal: FC<ModalProps> = ({
             {!hidePrimaryAction && (
               <Button
                 flex="1"
-                size="lg"
                 type="primary"
-                ml="4"
+                ml="3"
                 onPress={() => {
                   onPrimaryActionPress?.({ onClose });
                 }}
@@ -109,7 +100,6 @@ const MobileModal: FC<ModalProps> = ({
             {!hideSecondaryAction && (
               <Button
                 flex="1"
-                size="lg"
                 onPress={() => {
                   onSecondaryActionPress?.();
                   onClose?.();
