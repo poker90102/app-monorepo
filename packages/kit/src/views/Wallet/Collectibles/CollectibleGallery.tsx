@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 
-import { useIntl } from 'react-intl';
-
 import {
   Badge,
   Box,
@@ -52,9 +50,9 @@ const CollectibleList: FC<CollectibleListProps> = ({
       <HStack space={3} w="100%" flexDirection="row" alignItems="center">
         <Token src={item.collection.imageUrl ?? undefined} />
         <Box flex={1}>
-          <Typography.Body1 color="text-default" fontWeight="bold">
+          <Typography.Body1Strong color="text-default">
             {item.collection.name}
-          </Typography.Body1>
+          </Typography.Body1Strong>
         </Box>
         <HStack space={3}>
           <Badge
@@ -200,7 +198,6 @@ const CollectibleGallery: FC<CollectibleGalleryProps> = ({
   onSelectAsset,
   onSelectCollectible,
 }) => {
-  const intl = useIntl();
   const [view, setView] = React.useState(CollectibleView.Flat);
   // Set it to grid view when not in mobile
   const isSmallScreen = ['SMALL', 'NORMAL'].includes(useUserDevice().size);
@@ -211,10 +208,7 @@ const CollectibleGallery: FC<CollectibleGalleryProps> = ({
   }, [isSmallScreen]);
 
   const renderEmpty = () => (
-    <Empty
-      title={intl.formatMessage({ id: 'asset__collectibles_empty_title' })}
-      subTitle={intl.formatMessage({ id: 'asset__collectibles_empty_desc' })}
-    />
+    <Empty title="No Collectible" subTitle="NFTs will show here" />
   );
 
   const renderHeader = React.useCallback(() => {
@@ -227,9 +221,7 @@ const CollectibleGallery: FC<CollectibleGalleryProps> = ({
         justifyContent="space-between"
         pb={4}
       >
-        <Typography.Heading>
-          {intl.formatMessage({ id: 'asset__collectibles' })}
-        </Typography.Heading>
+        <Typography.Heading>Collectibles</Typography.Heading>
         <Pressable
           // no delay acts like debounce
           delayLongPress={0}
@@ -261,7 +253,7 @@ const CollectibleGallery: FC<CollectibleGalleryProps> = ({
         </Pressable>
       </HStack>
     );
-  }, [collectibles.length, intl, isSmallScreen, view]);
+  }, [collectibles, isSmallScreen, view]);
 
   if (view === CollectibleView.Flat) {
     return (

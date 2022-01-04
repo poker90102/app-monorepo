@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 
-import { useIntl } from 'react-intl';
-
 import {
   Box,
   Center,
@@ -23,8 +21,6 @@ type CollectionModalProps = {
 };
 
 const AssetModal: FC<CollectionModalProps> = ({ asset, visible, onClose }) => {
-  const intl = useIntl();
-
   if (!asset) return null;
 
   return (
@@ -100,18 +96,17 @@ const AssetModal: FC<CollectionModalProps> = ({ asset, visible, onClose }) => {
                 justifyContent="space-between"
                 py="4"
               >
-                <Typography.Body1 fontWeight="600" color="text-subdued">
+                <Typography.Body1Strong color="text-subdued">
                   Token ID
-                </Typography.Body1>
-                <Typography.Body1
+                </Typography.Body1Strong>
+                <Typography.Body1Strong
                   ml="4"
-                  fontWeight="600"
                   textAlign="right"
                   flex="1"
                   numberOfLines={999}
                 >
                   {asset.tokenId}
-                </Typography.Body1>
+                </Typography.Body1Strong>
               </Box>
               {!!asset.chain && (
                 <>
@@ -123,19 +118,18 @@ const AssetModal: FC<CollectionModalProps> = ({ asset, visible, onClose }) => {
                     justifyContent="space-between"
                     py="4"
                   >
-                    <Typography.Body1 fontWeight="600" color="text-subdued">
-                      {intl.formatMessage({ id: 'content__blockchain' })}
-                    </Typography.Body1>
+                    <Typography.Body1Strong color="text-subdued">
+                      Blockchain
+                    </Typography.Body1Strong>
 
-                    <Typography.Body1
+                    <Typography.Body1Strong
                       ml="4"
                       flex="1"
-                      fontWeight="600"
                       textAlign="right"
                       numberOfLines={999}
                     >
                       {asset.chain}
-                    </Typography.Body1>
+                    </Typography.Body1Strong>
                   </Box>
                 </>
               )}
@@ -149,21 +143,18 @@ const AssetModal: FC<CollectionModalProps> = ({ asset, visible, onClose }) => {
                     justifyContent="space-between"
                     py="4"
                   >
-                    <Typography.Body1 fontWeight="600" color="text-subdued">
-                      {intl.formatMessage({
-                        id: 'transaction__contract_address',
-                      })}
-                    </Typography.Body1>
+                    <Typography.Body1Strong color="text-subdued">
+                      Contract Address
+                    </Typography.Body1Strong>
 
-                    <Typography.Body1
+                    <Typography.Body1Strong
                       ml="4"
                       flex="1"
-                      fontWeight="600"
                       textAlign="right"
                       numberOfLines={999}
                     >
                       {asset.contractAddress}
-                    </Typography.Body1>
+                    </Typography.Body1Strong>
                   </Box>
                 </>
               )}
