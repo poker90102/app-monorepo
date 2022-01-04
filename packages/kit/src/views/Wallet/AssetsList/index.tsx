@@ -9,7 +9,6 @@ import {
   Pressable,
   ScrollableFlatList,
   ScrollableFlatListProps,
-  Text,
   Token,
   Typography,
   useUserDevice,
@@ -233,9 +232,9 @@ const AssetsList = ({ route }: { route: ScrollRoute }) => {
           src={item.logoURI}
         />
         <Box ml={3} mr={3} flexDirection="column" flex={1}>
-          <Text typography={{ sm: 'Body1Strong', lg: 'Body2Strong' }}>
+          <Typography.Body1 fontWeight="bold" color="text-default">
             {item.amount}
-          </Text>
+          </Typography.Body1>
           <Typography.Body2 color="text-subdued">
             {item.fiatAmount}
           </Typography.Body2>
@@ -243,9 +242,9 @@ const AssetsList = ({ route }: { route: ScrollRoute }) => {
         {['LARGE', 'XLARGE'].includes(size) && (
           <Box ml={3} mr={20} flexDirection="row" flex={1}>
             <Icon size={20} name="ActivityOutline" />
-            <Typography.Body2Strong ml={3}>
+            <Typography.Body1 fontWeight="bold" ml={3} color="text-default">
               {item.fiatAmount}
-            </Typography.Body2Strong>
+            </Typography.Body1>
           </Box>
         )}
         <Icon size={20} name="ChevronRightSolid" />

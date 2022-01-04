@@ -1,31 +1,8 @@
 import React, { ComponentProps, FC } from 'react';
 
-import { Text as NBText } from 'native-base';
+import { Text } from 'native-base';
 
-import { useUserDevice } from '../Provider/hooks';
-
-export type TypographyStyle =
-  | 'DisplayXLarge'
-  | 'DisplayLarge'
-  | 'DisplayMedium'
-  | 'DisplaySmall'
-  | 'PageHeading'
-  | 'Heading'
-  | 'Subheading'
-  | 'Button1'
-  | 'Button2'
-  | 'Body1'
-  | 'Body2'
-  | 'Caption'
-  | 'Body2'
-  | 'Body1Strong'
-  | 'Body1Underline'
-  | 'Body2Strong'
-  | 'Body2Underline'
-  | 'CaptionStrong'
-  | 'CaptionUnderline';
-
-export type FontProps = ComponentProps<typeof NBText>;
+export type FontProps = ComponentProps<typeof Text>;
 
 export const DisplayXLargeProps = {
   fontFamily: 'PlusJakartaSans-Bold',
@@ -101,7 +78,7 @@ export const CaptionProps = {
 };
 
 const Body1StrongProps = {
-  fontFamily: 'PlusJakartaSans-SemiBold',
+  fontFamily: 'PlusJakartaSans-Medium',
   fontWeight: 'semibold',
   fontSize: 16,
   lineHeight: 24,
@@ -112,11 +89,10 @@ const Body1UnderlineProps = {
   fontWeight: 'medium',
   fontSize: 16,
   lineHeight: 24,
-  underline: true,
 };
 
 const Body2StrongProps = {
-  fontFamily: 'PlusJakartaSans-SemiBold',
+  fontFamily: 'PlusJakartaSans-Medium',
   fontWeight: 'semibold',
   fontSize: 14,
   lineHeight: 20,
@@ -127,11 +103,10 @@ const Body2UnderlineProps = {
   fontWeight: 'medium',
   fontSize: 14,
   lineHeight: 20,
-  underline: true,
 };
 
 const CaptionStrongProps = {
-  fontFamily: 'PlusJakartaSans-SemiBold',
+  fontFamily: 'PlusJakartaSans-Medium',
   fontWeight: 'semibold',
   fontSize: 12,
   lineHeight: 16,
@@ -142,159 +117,110 @@ const CaptionUnderlineProps = {
   fontWeight: 'medium',
   fontSize: 12,
   lineHeight: 16,
-  underline: true,
-};
-
-export const getTypographyStyleProps = (style: TypographyStyle): FontProps => {
-  const propsMap: Record<TypographyStyle, FontProps> = {
-    'DisplayXLarge': DisplayXLargeProps,
-    'DisplayLarge': DisplayLargeProps,
-    'DisplayMedium': DisplayMediumProps,
-    'DisplaySmall': DisplaySmallProps,
-    'PageHeading': PageHeadingProps,
-    'Heading': HeadingProps,
-    'Subheading': SubheadingProps,
-    'Button1': Button1Props,
-    'Button2': Button2Props,
-    'Body1': Body1Props,
-    'Body2': Body2Props,
-    'Caption': CaptionProps,
-    'Body1Strong': Body1StrongProps,
-    'Body1Underline': Body1UnderlineProps,
-    'Body2Strong': Body2StrongProps,
-    'Body2Underline': Body2UnderlineProps,
-    'CaptionStrong': CaptionStrongProps,
-    'CaptionUnderline': CaptionUnderlineProps,
-  };
-  return propsMap[style];
 };
 
 export const DisplayXLarge: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...DisplayXLargeProps} {...rest}>
+  <Text color="text-default" {...DisplayXLargeProps} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 export const DisplayLarge: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...DisplayLargeProps} {...rest}>
+  <Text color="text-default" {...DisplayLargeProps} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 export const DisplayMedium: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...DisplayMediumProps} {...rest}>
+  <Text color="text-default" {...DisplayMediumProps} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 export const DisplaySmall: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...DisplaySmallProps} {...rest}>
+  <Text color="text-default" {...DisplaySmallProps} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 export const PageHeading: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...PageHeadingProps} {...rest}>
+  <Text color="text-default" {...PageHeadingProps} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 export const Heading: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...HeadingProps} {...rest}>
+  <Text color="text-default" {...HeadingProps} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 export const Subheading: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText
+  <Text
     color="text-default"
     textTransform="uppercase"
     {...SubheadingProps}
     {...rest}
   >
     {children}
-  </NBText>
+  </Text>
 );
 export const Button1: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...Button1Props} {...rest}>
+  <Text color="text-default" {...Button1Props} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 export const Button2: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...Button2Props} {...rest}>
+  <Text color="text-default" {...Button2Props} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 
 export const Body1: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...Body1Props} {...rest}>
+  <Text color="text-default" {...Body1Props} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 export const Body2: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...Body2Props} {...rest}>
+  <Text color="text-default" {...Body2Props} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 export const Caption: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...CaptionProps} {...rest}>
+  <Text color="text-default" {...CaptionProps} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 
 export const Body1Strong: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...Body1StrongProps} {...rest}>
+  <Text color="text-default" {...Body1StrongProps} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 
 export const Body1Underline: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...Body1UnderlineProps} {...rest}>
+  <Text color="text-default" {...Body1UnderlineProps} {...rest} underline>
     {children}
-  </NBText>
+  </Text>
 );
 
 export const Body2Strong: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...Body2StrongProps} {...rest}>
+  <Text color="text-default" {...Body2StrongProps} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 
 export const Body2Underline: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...Body2UnderlineProps} {...rest}>
+  <Text color="text-default" {...Body2UnderlineProps} {...rest} underline>
     {children}
-  </NBText>
+  </Text>
 );
 
 export const CaptionStrong: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...CaptionStrongProps} {...rest}>
+  <Text color="text-default" {...CaptionStrongProps} {...rest}>
     {children}
-  </NBText>
+  </Text>
 );
 
 export const CaptionUnderline: FC<FontProps> = ({ children, ...rest }) => (
-  <NBText color="text-default" {...CaptionUnderlineProps} {...rest}>
+  <Text color="text-default" {...CaptionUnderlineProps} {...rest} underline>
     {children}
-  </NBText>
+  </Text>
 );
-
-type TextProps = {
-  typography:
-    | TypographyStyle
-    | { 'sm': TypographyStyle; 'lg': TypographyStyle };
-} & FontProps;
-
-export const Text: FC<TextProps> = ({ typography, children, ...rest }) => {
-  const { size } = useUserDevice();
-  const isSmallScreen = ['SMALL', 'NORMAL'].includes(size);
-  let props;
-  if (typeof typography === 'string') {
-    props = getTypographyStyleProps(typography);
-  } else {
-    props = getTypographyStyleProps(
-      isSmallScreen ? typography.sm : typography.lg,
-    );
-  }
-  return (
-    <NBText color="text-default" {...props} {...rest}>
-      {children}
-    </NBText>
-  );
-};
 
 const Typography = {
   DisplayXLarge,
@@ -315,7 +241,6 @@ const Typography = {
   Body2Underline,
   CaptionStrong,
   CaptionUnderline,
-  Text,
 };
 
 export default Typography;

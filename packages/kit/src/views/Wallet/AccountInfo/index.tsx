@@ -34,8 +34,6 @@ const AccountInfo = () => {
   const isSmallView = ['SMALL', 'NORMAL'].includes(useUserDevice().size);
   const intl = useIntl();
   const navigation = useNavigation<NavigationProps>();
-  const { size } = useUserDevice();
-  const isSmallScreen = ['SMALL', 'NORMAL'].includes(size);
 
   const renderAccountAmountInfo = useCallback(
     (isCenter: boolean) => (
@@ -57,7 +55,6 @@ const AccountInfo = () => {
     () => (
       <Box flexDirection="row" mt={8} justifyContent="center">
         <Button
-          size={isSmallScreen ? 'lg' : 'base'}
           leftIcon={<Icon size={20} name="ArrowSmUpSolid" />}
           minW="126px"
           type="basic"
@@ -68,7 +65,6 @@ const AccountInfo = () => {
           {intl.formatMessage({ id: 'action__send' })}
         </Button>
         <Button
-          size={isSmallScreen ? 'lg' : 'base'}
           ml={4}
           leftIcon={<Icon name="ArrowSmDownSolid" />}
           minW="126px"
@@ -81,7 +77,7 @@ const AccountInfo = () => {
         </Button>
       </Box>
     ),
-    [intl, isSmallScreen, navigation],
+    [intl, navigation],
   );
 
   return useMemo(() => {

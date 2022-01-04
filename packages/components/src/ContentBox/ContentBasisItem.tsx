@@ -28,15 +28,19 @@ const ContentItem: FC<ContentItemProps> = ({
       justifyContent="space-between"
       alignItems="center"
     >
-      <Typography.Body1Strong h="100%" color="text-subdued">
+      <Typography.Body1 fontWeight="bold" h="100%" color="text-subdued">
         {title}
-      </Typography.Body1Strong>
+      </Typography.Body1>
       <Box flex={1} ml={3} flexDirection="column" alignItems="flex-end">
         {!!children && children}
         {!!value && (
-          <Typography.Body1Strong color="text-default" textAlign="right">
+          <Typography.Body1
+            fontWeight="bold"
+            color="text-default"
+            textAlign="right"
+          >
             {value}
-          </Typography.Body1Strong>
+          </Typography.Body1>
         )}
         {!!describe && (
           <Typography.Body2 color="text-subdued" textAlign="right">

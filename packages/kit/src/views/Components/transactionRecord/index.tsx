@@ -106,9 +106,9 @@ const TransactionRecord: FC<TransactionRecordProps> = ({ transaction }) => {
   const basicInfo = useCallback(
     () => (
       <Box minW="156px" flex={1}>
-        <Typography.Body1Strong>
+        <Typography.Body1 fontWeight="bold">
           {getTransactionTypeStr(intl, transaction)}
-        </Typography.Body1Strong>
+        </Typography.Body1>
         <Typography.Body2 color={getTransactionStatusColor(transaction.state)}>
           {transaction.state === 'success'
             ? formatDate(transaction.date)
@@ -122,10 +122,10 @@ const TransactionRecord: FC<TransactionRecordProps> = ({ transaction }) => {
   const amountInfo = useCallback(
     () => (
       <Box alignItems="flex-end" minW="156px">
-        <Typography.Body1Strong>
+        <Typography.Body1 fontWeight="bold">
           {transaction.type === 'Send' ?? '-'}
           {transaction.amount}
-        </Typography.Body1Strong>
+        </Typography.Body1>
         <Typography.Body2 color="text-subdued">
           {transaction.type === 'Send' ?? '-'}99.89 USD
         </Typography.Body2>
