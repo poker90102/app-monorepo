@@ -19,27 +19,16 @@ import {
 import {
   CreateAccountModalRoutes,
   CreateAccountRoutesParams,
-  ImportAccountModalRoutes,
-  ImportAccountRoutesParams,
   ModalRoutes,
-  WatchedAccountModalRoutes,
-  WatchedAccountRoutesParams,
 } from '@onekeyhq/kit/src/routes';
+import ImportedAccount from '@onekeyhq/kit/src/views/Account/ImportedAccount';
 
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type NavigationProps = NativeStackNavigationProp<
   CreateAccountRoutesParams,
   CreateAccountModalRoutes.CreateAccountForm
-> &
-  NativeStackNavigationProp<
-    ImportAccountRoutesParams,
-    ImportAccountModalRoutes.ImportAccountModal
-  > &
-  NativeStackNavigationProp<
-    WatchedAccountRoutesParams,
-    WatchedAccountModalRoutes.WatchedAccountModal
-  >;
+>;
 
 // const WATCHED_ACCOUNTS = [];
 // const IMPORTED_ACCOUNTS = [];
@@ -70,6 +59,7 @@ const AccountSelectorChildren: FC<ChildrenProps> = ({
   const handleChange = useCallback(
     (type) => {
       if (type === 'addAccount') {
+        // setAddAccountVisible(true);
         handleToggleVisible();
         setTimeout(() => {
           navigation.navigate(ModalRoutes.CreateAccountForm);
@@ -143,20 +133,7 @@ const AccountSelectorChildren: FC<ChildrenProps> = ({
 
     if (type === 'watched') {
       return (
-        <Pressable
-          px="2"
-          justifyContent="center"
-          onPress={() => {
-            handleToggleVisible();
-            setTimeout(
-              () =>
-                navigation.navigate(
-                  WatchedAccountModalRoutes.WatchedAccountModal,
-                ),
-              150,
-            );
-          }}
-        >
+        <Pressable px="2" justifyContent="center">
           <Icon name="PlusOutline" />
         </Pressable>
       );
@@ -164,22 +141,13 @@ const AccountSelectorChildren: FC<ChildrenProps> = ({
 
     if (type === 'imported') {
       return (
-        <Pressable
-          px="2"
-          justifyContent="center"
-          onPress={() => {
-            handleToggleVisible();
-            setTimeout(
-              () =>
-                navigation.navigate(
-                  ImportAccountModalRoutes.ImportAccountModal,
-                ),
-              150,
-            );
-          }}
-        >
-          <Icon name="PlusOutline" />
-        </Pressable>
+        <ImportedAccount
+          trigger={
+            <Pressable px="2" justifyContent="center">
+              <Icon name="PlusOutline" />
+            </Pressable>
+          }
+        />
       );
     }
   }
