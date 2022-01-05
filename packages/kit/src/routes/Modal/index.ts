@@ -1,11 +1,25 @@
-import CreateAccountModal, { CreateAccountModalRoutes } from './CreateAccount';
-import ManageNetworkModal, { ManageNetworkModalRoutes } from './ManageNetwork';
-import ReceiveQRCodeModal, { ReceiveQRCodeModalRoutes } from './ReceiveToken';
-import SendTokenModal, { SendTokenModalRoutes } from './SendToken';
-import TransactionModal, { TransactionModalRoutes } from './Transaction';
+import CreateAccountModal, {
+  CreateAccountModalRoutes,
+  CreateAccountRoutesParams,
+} from './CreateAccount';
+import ManageNetworkModal, {
+  ManageNetworkModalRoutes,
+  ManageNetworkRoutesParams,
+} from './ManageNetwork';
+import ReceiveQRCodeModal, {
+  ReceiveQRCodeModalRoutes,
+  ReceiveQRCodeRoutesParams,
+} from './ReceiveToken';
+import TransactionModal, {
+  TransactionModalRoutes,
+  TransactionModalRoutesParams,
+} from './Transaction';
 import TransactionDetailModal, {
   TransactionDetailModalRoutes,
+  TransactionDetailRoutesParams,
 } from './TransactionDetail';
+
+import type { NavigatorScreenParams } from '@react-navigation/native';
 
 const modalStackScreenList = [
   {
@@ -15,10 +29,6 @@ const modalStackScreenList = [
   {
     name: ReceiveQRCodeModalRoutes.ReceiveQRCodeModal,
     component: ReceiveQRCodeModal,
-  },
-  {
-    name: SendTokenModalRoutes.SendTokenModal,
-    component: SendTokenModal,
   },
   {
     name: TransactionModalRoutes.TransactionModal,
@@ -37,10 +47,17 @@ const modalStackScreenList = [
 export const ModalRoutes = {
   ...CreateAccountModalRoutes,
   ...ReceiveQRCodeModalRoutes,
-  ...SendTokenModalRoutes,
   ...TransactionModalRoutes,
   ...ManageNetworkModalRoutes,
   ...TransactionDetailModalRoutes,
+};
+
+export type ModalTypes = {
+  [CreateAccountModalRoutes.CreateAccountForm]: NavigatorScreenParams<CreateAccountRoutesParams>;
+  [ManageNetworkModalRoutes.ManageNetworkModal]: NavigatorScreenParams<ManageNetworkRoutesParams>;
+  [ReceiveQRCodeModalRoutes.ReceiveQRCodeModal]: NavigatorScreenParams<ReceiveQRCodeRoutesParams>;
+  [TransactionModalRoutes.TransactionModal]: NavigatorScreenParams<TransactionModalRoutesParams>;
+  [TransactionDetailModalRoutes.TransactionDetailModal]: NavigatorScreenParams<TransactionDetailRoutesParams>;
 };
 
 export default modalStackScreenList;
