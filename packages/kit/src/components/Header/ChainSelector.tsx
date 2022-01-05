@@ -90,9 +90,7 @@ const ChainSelector: FC = () => {
         footerIcon="PencilSolid"
         isTriggerPlain
         onPressFooter={() =>
-          setTimeout(() => {
-            navigation.navigate(ManageNetworkModalRoutes.ManageNetworkModal);
-          }, 200)
+          navigation.navigate(ManageNetworkModalRoutes.ManageNetworkModal)
         }
       />
     </Box>

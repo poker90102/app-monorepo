@@ -12,8 +12,7 @@ export enum CreateAccountModalRoutes {
 }
 
 export type CreateAccountRoutesParams = {
-  [CreateAccountModalRoutes.CreateAccountForm]: undefined;
-  [CreateAccountModalRoutes.RecoveryAccountForm]: undefined;
+  [key in CreateAccountModalRoutes]: undefined;
 };
 
 const CreateAccountNavigator =

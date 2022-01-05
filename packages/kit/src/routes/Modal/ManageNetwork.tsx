@@ -10,7 +10,7 @@ export enum ManageNetworkModalRoutes {
 }
 
 export type ManageNetworkRoutesParams = {
-  [ManageNetworkModalRoutes.ManageNetworkModal]: undefined;
+  [key in ManageNetworkModalRoutes]: undefined;
 };
 
 const ManageNetworkNavigator =

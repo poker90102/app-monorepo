@@ -10,7 +10,7 @@ export enum SendTokenModalRoutes {
 }
 
 export type SendTokenRoutesParams = {
-  [SendTokenModalRoutes.SendTokenModal]: undefined;
+  [key in SendTokenModalRoutes]: undefined;
 };
 
 const ReceiveQRCodeNavigator = createStackNavigator<SendTokenRoutesParams>();
