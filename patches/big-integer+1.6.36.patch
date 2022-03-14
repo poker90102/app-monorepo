@@ -1,9 +1,9 @@
 diff --git a/node_modules/big-integer/BigInteger.js b/node_modules/big-integer/BigInteger.js
-index c4263d5..6ab8528 100644
+index 605a498..eea0594 100644
 --- a/node_modules/big-integer/BigInteger.js
 +++ b/node_modules/big-integer/BigInteger.js
-@@ -1353,6 +1353,9 @@ var bigInt = (function (undefined) {
-     }
+@@ -1230,6 +1230,9 @@ var bigInt = (function (undefined) {
+     SmallInteger.prototype.toJSNumber = SmallInteger.prototype.valueOf;
  
      function parseStringValue(v) {
 +        if (v.startsWith("0x") || v.startsWith("0X")) {
