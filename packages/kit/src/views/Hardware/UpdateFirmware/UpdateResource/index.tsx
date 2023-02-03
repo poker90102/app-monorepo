@@ -12,7 +12,7 @@ import {
   Image,
   LottieView,
   Modal,
-  Progress,
+  Spinner,
   Text,
   useTheme,
 } from '@onekeyhq/components';
@@ -83,7 +83,6 @@ const UpdateWarningModal: FC = () => {
 
   const [isInBoardloader, setIsInBoardloader] = useState(false);
   const [updateResult, setUpdateResult] = useState(false);
-  const [copyFileProgress, setCopyFileProgress] = useState(0);
   const [resError, setResError] = useState('');
   // confirm choose disk path for Mac app store version
   const [confirmChooseDisk, setConfirmChooseDisk] = useState(false);
@@ -221,10 +220,6 @@ const UpdateWarningModal: FC = () => {
           }
         },
       );
-
-      window.desktopApi?.on?.('touch/update-progress', (progress: number) => {
-        setCopyFileProgress(progress);
-      });
     }
   }, [intl, isInBoardloader, updateTouchResource, navigation, firmware]);
 
@@ -284,29 +279,15 @@ const UpdateWarningModal: FC = () => {
         id: 'modal__update_resources_select_resources_desc',
       });
     if (step3)
-      return intl.formatMessage(
-        {
-          id: 'modal__update_resources_updating_resources_desc',
-        },
-        {
-          pct: `${copyFileProgress}%`,
-        },
-      );
+      return intl.formatMessage({
+        id: 'modal__update_resources_updating_resources_desc',
+      });
     if (step4)
       return intl.formatMessage({
         id: 'modal__update_resources_restart_device_desc',
       });
     return undefined;
-  }, [
-    intl,
-    shouldRetry,
-    step1,
-    step2,
-    step3,
-    step4,
-    isDiskPermissionDenied,
-    copyFileProgress,
-  ]);
+  }, [intl, shouldRetry, step1, step2, step3, step4, isDiskPermissionDenied]);
 
   const renderEmoji = useMemo(() => {
     if (shouldRetry) return '😔';
@@ -393,8 +374,8 @@ const UpdateWarningModal: FC = () => {
                   mb="16px"
                 />
               ) : step3 ? (
-                <Box mb="16px" width="full" px={12}>
-                  <Progress.Bar value={copyFileProgress} />
+                <Box mb="16px">
+                  <Spinner size="lg" />
                 </Box>
               ) : step4 ? (
                 <Center
